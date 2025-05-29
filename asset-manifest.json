@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/banky-auto/static/css/main.6c848932.css",
-    "main.js": "/banky-auto/static/js/main.b683ae0e.js",
+    "main.js": "/banky-auto/static/js/main.00a1aacf.js",
     "static/js/453.f0e06290.chunk.js": "/banky-auto/static/js/453.f0e06290.chunk.js",
     "static/media/pilot2020.jpg": "/banky-auto/static/media/pilot2020.db5ad35133b6eadf4e46.jpg",
     "static/media/accord2020.jpg": "/banky-auto/static/media/accord2020.cc01de159ebfcf7966fc.jpg",
     "index.html": "/banky-auto/index.html",
     "main.6c848932.css.map": "/banky-auto/static/css/main.6c848932.css.map",
-    "main.b683ae0e.js.map": "/banky-auto/static/js/main.b683ae0e.js.map",
+    "main.00a1aacf.js.map": "/banky-auto/static/js/main.00a1aacf.js.map",
     "453.f0e06290.chunk.js.map": "/banky-auto/static/js/453.f0e06290.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6c848932.css",
-    "static/js/main.b683ae0e.js"
+    "static/js/main.00a1aacf.js"
   ]
 }
