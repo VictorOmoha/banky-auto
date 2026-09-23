@@ -214,7 +214,7 @@ function SearchSuggest({ placeholder = 'Search by make, model or year', buttonLa
             {termItems.map((t) => (
               <li key={t.label} {...optionProps(t.to)}>
                 <span className="suggest__term-icon">
-                  <Icon name={q ? 'search' : 'sparkle'} size={16} />
+                  <Icon name="search" size={16} />
                 </span>
                 <span className="suggest__term">
                   <Highlight text={t.label} query={q} />
