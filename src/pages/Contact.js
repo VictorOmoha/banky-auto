@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Icon from '../components/Icon';
+import { ContactLink, useContact } from '../components/ContactSheet';
 import PageHeader from '../components/PageHeader';
 import LocationMap from '../components/LocationMap';
-import { site, fullAddress, mapsUrl, mailto } from '../data/site';
+import { site, fullAddress, mapsUrl } from '../data/site';
 import './Pages.css';
 
 const empty = { name: '', email: '', phone: '', subject: '', message: '' };
@@ -20,7 +21,7 @@ function validate(data) {
 function Contact() {
   const [form, setForm] = useState(empty);
   const [errors, setErrors] = useState({});
-  const [sentLink, setSentLink] = useState(null);
+  const openContact = useContact();
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -37,10 +38,13 @@ function Contact() {
       return;
     }
     const body = [form.message, '', `— ${form.name}`, form.email, form.phone].filter(Boolean).join('\n');
-    const link = mailto(site.email, form.subject, body);
-    window.location.href = link;
-    setSentLink(link);
-    setForm(empty);
+    openContact('email', {
+      title: 'Send your message',
+      intro: 'Your message is ready. Send it with any option below.',
+      to: site.email,
+      subject: form.subject,
+      body,
+    });
   };
 
   const field = (name, label, props = {}) => (
@@ -87,7 +91,7 @@ function Contact() {
       <section className="section">
         <div className="container contact">
           <div className="contact__info">
-            <a href={site.phoneHref} className="contact-card card">
+            <ContactLink type="call" className="contact-card card">
               <span className="icon-tile">
                 <Icon name="phone" size={20} />
               </span>
@@ -96,8 +100,8 @@ function Contact() {
                 <p>{site.phone}</p>
               </div>
               <Icon name="arrowRight" size={18} className="contact-card__go" />
-            </a>
-            <a href={`mailto:${site.email}`} className="contact-card card">
+            </ContactLink>
+            <ContactLink type="email" className="contact-card card">
               <span className="icon-tile">
                 <Icon name="mail" size={20} />
               </span>
@@ -107,7 +111,7 @@ function Contact() {
                 <p>{site.salesEmail}</p>
               </div>
               <Icon name="arrowRight" size={18} className="contact-card__go" />
-            </a>
+            </ContactLink>
             <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="contact-card card">
               <span className="icon-tile">
                 <Icon name="pin" size={20} />
@@ -138,17 +142,6 @@ function Contact() {
           <div className="contact__form card">
             <h2 className="h3">Send us a message</h2>
             <p className="muted contact__form-lead">Tell us what you’re looking for and we’ll get back to you.</p>
-            {sentLink && (
-              <div className="notice contact__notice" role="status">
-                <Icon name="check" size={22} />
-                <div>
-                  <strong>Your email is ready to send.</strong>
-                  <p>
-                    Your email app should have opened with your message. If it didn’t, <a href={sentLink}>open it here</a>.
-                  </p>
-                </div>
-              </div>
-            )}
             <form className="form-grid" onSubmit={onSubmit} noValidate>
               {field('name', 'Name', { autoComplete: 'name' })}
               {field('email', 'Email', { type: 'email', autoComplete: 'email' })}

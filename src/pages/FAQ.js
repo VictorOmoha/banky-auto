@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import Icon from '../components/Icon';
+import { ContactLink } from '../components/ContactSheet';
 import { site } from '../data/site';
 import './Pages.css';
 
@@ -70,9 +71,9 @@ function FAQ() {
             </span>
             <h2 className="h3">Still have questions?</h2>
             <p className="muted">We’re happy to help. Reach out and talk to a real person.</p>
-            <a href={site.phoneHref} className="btn btn--accent btn--block">
+            <ContactLink type="call" className="btn btn--accent btn--block">
               <Icon name="phone" size={16} /> {site.phone}
-            </a>
+            </ContactLink>
             <Link to="/contact" className="btn btn--ghost btn--block">
               Send a message
             </Link>

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes, useParams } from 'rea
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import { ContactProvider } from './components/ContactSheet';
 import Home from './pages/Home';
 import Inventory from './pages/Inventory';
 import VehicleDetail from './pages/VehicleDetail';
@@ -24,29 +25,31 @@ function App() {
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <ScrollToTop />
-      <div className="app">
-        <a href="#main" className="skip-link">
-          Skip to content
-        </a>
-        <Navbar />
-        <main id="main">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/vehicles" element={<Inventory />} />
-            <Route path="/vehicles/:id" element={<VehicleDetail />} />
-            <Route path="/inventory" element={<Navigate to="/vehicles" replace />} />
-            <Route path="/inventory/:id" element={<LegacyVehicleRedirect />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/help" element={<HelpCenter />} />
-            <Route path="/careers" element={<Careers />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <ContactProvider>
+        <div className="app">
+          <a href="#main" className="skip-link">
+            Skip to content
+          </a>
+          <Navbar />
+          <main id="main">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/vehicles" element={<Inventory />} />
+              <Route path="/vehicles/:id" element={<VehicleDetail />} />
+              <Route path="/inventory" element={<Navigate to="/vehicles" replace />} />
+              <Route path="/inventory/:id" element={<LegacyVehicleRedirect />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/help" element={<HelpCenter />} />
+              <Route path="/careers" element={<Careers />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </ContactProvider>
     </Router>
   );
 }

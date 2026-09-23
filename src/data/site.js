@@ -35,9 +35,20 @@ export const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination
 // Map embed located by address, so the pin follows any address change.
 export const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(fullAddress)}&z=15&output=embed`;
 
-// Opens the visitor's email app with a pre-filled message. The site has no
-// backend, so forms hand off to email instead of pretending to submit.
-export function mailto(to, subject, body) {
-  const params = new URLSearchParams({ subject, body });
-  return `mailto:${to}?${params.toString().replace(/\+/g, '%20')}`;
+const query = (params) =>
+  Object.entries(params)
+    .filter(([, v]) => v)
+    .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+    .join('&');
+
+export function mailto(to, subject = '', body = '') {
+  const q = query({ subject, body });
+  return `mailto:${to}${q ? `?${q}` : ''}`;
 }
+
+// Web-mail compose links work even when the visitor has no email app set up.
+export const gmailUrl = (to, subject = '', body = '') =>
+  `https://mail.google.com/mail/?${query({ view: 'cm', fs: '1', to, su: subject, body })}`;
+
+export const outlookUrl = (to, subject = '', body = '') =>
+  `https://outlook.live.com/mail/0/deeplink/compose?${query({ to, subject, body })}`;

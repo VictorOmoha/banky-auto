@@ -1,7 +1,8 @@
 import React from 'react';
 import PageHeader from '../components/PageHeader';
 import Icon from '../components/Icon';
-import { site, mailto } from '../data/site';
+import { ContactLink } from '../components/ContactSheet';
+import { site } from '../data/site';
 import './Pages.css';
 
 const perks = [
@@ -59,12 +60,15 @@ function Careers() {
                   <p className="role__type">{r.type}</p>
                   <p className="muted">{r.text}</p>
                 </div>
-                <a
-                  href={mailto(site.careersEmail, `Application: ${r.title}`, `Hi Banky Auto team,\n\nI'd like to apply for the ${r.title} position.\n\n`)}
+                <ContactLink
+                  type="email"
+                  email={site.careersEmail}
+                  subject={`Application: ${r.title}`}
+                  body={`Hi Banky Auto team,\n\nI'd like to apply for the ${r.title} position.\n\n`}
                   className="btn btn--accent"
                 >
                   Apply now <Icon name="arrowRight" size={16} className="icon-slide" />
-                </a>
+                </ContactLink>
               </div>
             ))}
           </div>

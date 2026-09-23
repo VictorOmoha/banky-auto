@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import Icon from '../components/Icon';
+import { ContactLink } from '../components/ContactSheet';
 import { site } from '../data/site';
 import './Pages.css';
 
@@ -44,12 +45,12 @@ function HelpCenter() {
               </p>
             </div>
             <div className="support-strip__actions">
-              <a href={site.phoneHref} className="btn btn--accent">
+              <ContactLink type="call" className="btn btn--accent">
                 <Icon name="phone" size={16} /> {site.phone}
-              </a>
-              <a href={`mailto:${site.email}`} className="btn btn--ghost">
+              </ContactLink>
+              <ContactLink type="email" className="btn btn--ghost">
                 <Icon name="mail" size={16} /> {site.email}
-              </a>
+              </ContactLink>
             </div>
           </div>
         </div>

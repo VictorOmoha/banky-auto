@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 import Icon from './Icon';
+import { ContactLink } from './ContactSheet';
 import { site, fullAddress, mapsUrl } from '../data/site';
 import './Footer.css';
 
@@ -44,12 +45,12 @@ function Footer() {
             <Logo />
             <p>{site.tagline} Every car is inspected, photographed in detail and priced upfront.</p>
             <div className="footer__contact">
-              <a href={site.phoneHref}>
+              <ContactLink type="call">
                 <Icon name="phone" size={16} /> {site.phone}
-              </a>
-              <a href={`mailto:${site.email}`}>
+              </ContactLink>
+              <ContactLink type="email">
                 <Icon name="mail" size={16} /> {site.email}
-              </a>
+              </ContactLink>
               <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
                 <Icon name="pin" size={16} /> {fullAddress}
               </a>

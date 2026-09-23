@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import Icon from './Icon';
+import { ContactLink } from './ContactSheet';
 import Logo from './Logo';
 import { site } from '../data/site';
 import './Navbar.css';
@@ -53,10 +54,10 @@ function Navbar() {
         </nav>
 
         <div className="nav__actions">
-          <a href={site.phoneHref} className="nav__phone">
+          <ContactLink type="call" className="nav__phone">
             <Icon name="phone" size={16} />
             <span>{site.phone}</span>
-          </a>
+          </ContactLink>
           <Link to="/vehicles" className="btn btn--accent nav__cta">
             Shop cars
           </Link>
@@ -85,9 +86,9 @@ function Navbar() {
             <Link to="/vehicles" className="btn btn--accent btn--lg btn--block">
               Shop all cars
             </Link>
-            <a href={site.phoneHref} className="btn btn--ghost btn--lg btn--block">
+            <ContactLink type="call" className="btn btn--ghost btn--lg btn--block">
               <Icon name="phone" size={18} /> Call {site.phone}
-            </a>
+            </ContactLink>
           </div>
         </nav>
       </div>

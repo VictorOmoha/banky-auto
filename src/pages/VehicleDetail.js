@@ -5,7 +5,8 @@ import Modal from '../components/Modal';
 import VehicleCard from '../components/VehicleCard';
 import NotFound from './NotFound';
 import { getVehicle, vehicles, vehicleName, formatPrice, formatMiles } from '../data/vehicles';
-import { site, mailto } from '../data/site';
+import { ContactLink, useContact } from '../components/ContactSheet';
+import { site } from '../data/site';
 import './VehicleDetail.css';
 
 const emptyForm = { name: '', email: '', phone: '', date: '', time: '', comments: '' };
@@ -72,8 +73,8 @@ function VehicleDetail() {
   const vehicle = getVehicle(id);
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
-  const [sentLink, setSentLink] = useState(null);
   const closeModal = useCallback(() => setModalOpen(false), []);
+  const openContact = useContact();
 
   useEffect(() => {
     if (vehicle) document.title = `${vehicleName(vehicle)} ${vehicle.trim} · ${site.name}`;
@@ -105,7 +106,6 @@ function VehicleDetail() {
     ['VIN', vehicle.vin],
   ].filter(([, value]) => value);
 
-  const askLink = mailto(site.salesEmail, `Question about the ${fullName}`, `Hi, I'm interested in the ${fullName} listed at ${formatPrice(vehicle.price)}.\n\n`);
 
   const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
@@ -121,15 +121,17 @@ function VehicleDetail() {
       `Preferred time: ${form.time}`,
       ...(form.comments ? ['', 'Comments:', form.comments] : []),
     ].join('\n');
-    const link = mailto(site.salesEmail, `Test drive request: ${fullName}`, body);
-    window.location.href = link;
-    setSentLink(link);
+    setModalOpen(false);
+    openContact('email', {
+      title: 'Send your test drive request',
+      intro: 'Your request is ready. Send it with any option below and we’ll confirm your time by phone or email.',
+      to: site.salesEmail,
+      subject: `Test drive request: ${fullName}`,
+      body,
+    });
   };
 
-  const openModal = () => {
-    setSentLink(null);
-    setModalOpen(true);
-  };
+  const openModal = () => setModalOpen(true);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -183,12 +185,18 @@ function VehicleDetail() {
                   <Icon name="calendar" size={18} /> Schedule a test drive
                 </button>
                 <div className="buybox__row">
-                  <a href={site.phoneHref} className="btn btn--ghost btn--block">
+                  <ContactLink type="call" className="btn btn--ghost btn--block">
                     <Icon name="phone" size={16} /> Call
-                  </a>
-                  <a href={askLink} className="btn btn--ghost btn--block">
+                  </ContactLink>
+                  <ContactLink
+                    type="email"
+                    email={site.salesEmail}
+                    subject={`Question about the ${fullName}`}
+                    body={`Hi, I'm interested in the ${fullName} listed at ${formatPrice(vehicle.price)}.\n\n`}
+                    className="btn btn--ghost btn--block"
+                  >
                     <Icon name="mail" size={16} /> Email
-                  </a>
+                  </ContactLink>
                 </div>
               </div>
 
@@ -271,18 +279,6 @@ function VehicleDetail() {
       </section>
 
       <Modal open={modalOpen} onClose={closeModal} title="Schedule a test drive">
-        {sentLink ? (
-          <div className="notice">
-            <Icon name="check" size={22} />
-            <div>
-              <strong>Almost done: send the email to confirm.</strong>
-              <p>
-                Your email app should have opened with your request. If it didn’t, <a href={sentLink}>open it here</a> or call us at{' '}
-                <a href={site.phoneHref}>{site.phone}</a>.
-              </p>
-            </div>
-          </div>
-        ) : (
           <form className="form-grid" onSubmit={onSubmit}>
             <p className="span-2 muted">
               {fullName} · {formatPrice(vehicle.price)}
@@ -317,10 +313,9 @@ function VehicleDetail() {
               <button type="submit" className="btn btn--accent btn--lg btn--block">
                 Send request
               </button>
-              <p className="form-note muted">This opens your email app with the details filled in. We’ll confirm your time by phone or email.</p>
+              <p className="form-note muted">Next, you’ll choose how to send it: Gmail, Outlook, your email app, or copy it.</p>
             </div>
           </form>
-        )}
       </Modal>
     </div>
   );

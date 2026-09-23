@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
+import { ContactLink } from './ContactSheet';
 import { site } from '../data/site';
 import './CtaBand.css';
 
@@ -19,9 +20,9 @@ function CtaBand({
               <Link to="/vehicles" className="btn btn--light btn--lg">
                 Browse cars <Icon name="arrowRight" size={18} className="icon-slide" />
               </Link>
-              <a href={site.phoneHref} className="btn btn--outline-light btn--lg">
+              <ContactLink type="call" className="btn btn--outline-light btn--lg">
                 <Icon name="phone" size={18} /> {site.phone}
-              </a>
+              </ContactLink>
             </div>
           </div>
           <div className="cta-band__art" aria-hidden="true">
