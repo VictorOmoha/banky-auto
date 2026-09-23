@@ -108,7 +108,7 @@ function Contact() {
               <div>
                 <h2>Email</h2>
                 <p>{site.email}</p>
-                <p>{site.salesEmail}</p>
+                {site.salesEmail !== site.email && <p>{site.salesEmail}</p>}
               </div>
               <Icon name="arrowRight" size={18} className="contact-card__go" />
             </ContactLink>
