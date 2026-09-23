@@ -1,58 +1,89 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import Logo from './Logo';
+import Icon from './Icon';
+import { site, fullAddress, mapsUrl } from '../data/site';
 import './Footer.css';
 
+const columns = [
+  {
+    title: 'Shop',
+    links: [
+      { to: '/vehicles', label: 'All inventory' },
+      { to: '/vehicles?body=Sedan', label: 'Sedans' },
+      { to: '/vehicles?body=SUV', label: 'SUVs' },
+      { to: '/how-it-works', label: 'How it works' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { to: '/about', label: 'About us' },
+      { to: '/careers', label: 'Careers' },
+      { to: '/contact', label: 'Contact' },
+    ],
+  },
+  {
+    title: 'Support',
+    links: [
+      { to: '/faq', label: 'FAQ' },
+      { to: '/help', label: 'Help center' },
+      { to: '/faq#title-status', label: 'Title status explained' },
+    ],
+  },
+];
+
 function Footer() {
+  const year = new Date().getFullYear();
+
   return (
     <footer className="footer">
-      <div className="footer-container">
-        <div className="footer-section">
-          <h3>Company Info</h3>
-          <ul>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/contact">Contact</a></li>
-            <li><a href="/careers">Careers</a></li>
-          </ul>
-        </div>
-        <div className="footer-section">
-          <h3>Customer Support</h3>
-          <ul>
-            <li><a href="/faq">FAQs</a></li>
-            <li><a href="/help">Help Center</a></li>
-            <li>
-              <a 
-                href="javascript:void(0)" 
-                className="live-chat"
-                onClick={(e) => {
-                  e.preventDefault();
-                  // Add your live chat functionality here
-                  console.log('Live chat clicked');
-                }}
-              >
-                Live Chat
+      <div className="container">
+        <div className="footer__top">
+          <div className="footer__brand">
+            <Logo light />
+            <p>{site.tagline} Every car is inspected, photographed in detail and priced upfront.</p>
+            <div className="footer__contact">
+              <a href={site.phoneHref}>
+                <Icon name="phone" size={16} /> {site.phone}
               </a>
-            </li>
-          </ul>
-        </div>
-        <div className="footer-section">
-          <h3>Legal</h3>
-          <ul>
-            <li><a href="/privacy">Privacy Policy</a></li>
-            <li><a href="/terms">Terms & Conditions</a></li>
-            <li><a href="/disclaimer">Salvage Title Disclaimer</a></li>
-          </ul>
-        </div>
-        <div className="footer-section">
-          <h3>Connect With Us</h3>
-          <div className="social-icons">
-            <a href="https://twitter.com/bankyauto" target="_blank" rel="noopener noreferrer" className="social-icon">🐦</a>
-            <a href="https://instagram.com/bankyauto" target="_blank" rel="noopener noreferrer" className="social-icon">📸</a>
-            <a href="https://facebook.com/bankyauto" target="_blank" rel="noopener noreferrer" className="social-icon">👥</a>
-            <a href="https://linkedin.com/company/bankyauto" target="_blank" rel="noopener noreferrer" className="social-icon">💼</a>
+              <a href={`mailto:${site.email}`}>
+                <Icon name="mail" size={16} /> {site.email}
+              </a>
+              <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
+                <Icon name="pin" size={16} /> {fullAddress}
+              </a>
+            </div>
           </div>
+
+          {columns.map((col) => (
+            <div key={col.title} className="footer__col">
+              <h3>{col.title}</h3>
+              <ul>
+                {col.links.map((l) => (
+                  <li key={l.label}>
+                    <Link to={l.to}>{l.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-      </div>
-      <div className="footer-bottom">
-        <p>&copy; 2024 Banky Auto. All rights reserved.</p>
+
+        <div className="footer__bottom">
+          <p>
+            © {year} {site.legalName}. All rights reserved.
+          </p>
+          <ul className="footer__social">
+            {site.socials.map((s) => (
+              <li key={s.label}>
+                <a href={s.href} target="_blank" rel="noopener noreferrer">
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </footer>
   );

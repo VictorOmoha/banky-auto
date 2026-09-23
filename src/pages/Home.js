@@ -1,220 +1,252 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Icon from '../components/Icon';
+import VehicleCard from '../components/VehicleCard';
+import CtaBand from '../components/CtaBand';
+import { vehicles, formatPrice, vehicleName } from '../data/vehicles';
+import { reviews } from '../data/reviews';
+import { steps } from '../data/process';
 import './Home.css';
-import { useNavigate, Link } from 'react-router-dom';
+
+const heroCar = vehicles.find((v) => v.id === 'camry2023');
+const featured = vehicles.filter((v) => v.featured).slice(0, 6);
+const lowestPrice = Math.min(...vehicles.map((v) => v.price));
+
+const quickLinks = [
+  { label: 'SUVs', to: '/vehicles?body=SUV' },
+  { label: 'Sedans', to: '/vehicles?body=Sedan' },
+  { label: 'Honda', to: '/vehicles?make=Honda' },
+  { label: 'Under $15k', to: '/vehicles?max=15000' },
+];
+
+const promises = [
+  { icon: 'shield', title: 'Inspected & documented', text: 'Every car is checked over and photographed inside and out before it’s listed.' },
+  { icon: 'file', title: 'Upfront pricing', text: 'The price you see is the price. No surprise fees or pressure at the lot.' },
+  { icon: 'key', title: 'Paid off & ready', text: 'Many of our cars are paid off, so there’s no lender payoff to wait on.' },
+  { icon: 'handshake', title: 'Local & personal', text: 'You deal directly with the owner, from your first question to the handover.' },
+];
 
 function Home() {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [query, setQuery] = useState('');
 
-  // Sample car data - you should replace this with real data from your backend
-  const sampleCars = [
-    {
-      id: 'pilot2020',
-      title: "2020 Honda Pilot EX-L Sport Utility 4D",
-      price: 17500,
-      image: "/cars/pilot2020.jpg",
-      mileage: "65,458 miles",
-      shipping: "Free Shipping",
-      delivery: "Get it Monday",
-      path: "/inventory/pilot2020"
-    },
-    {
-      id: 'camry2023',
-      title: "2023 Toyota Camry SE",
-      price: 22990,
-      image: "/cars/camry.jpeg",
-      mileage: "624 miles",
-      shipping: "Free Shipping",
-      delivery: "Get it Monday",
-      path: "/inventory/camry2023"
-    },
-    {
-      id: 'civic2022',
-      title: "2022 Honda Civic",
-      price: 21990,
-      image: "/cars/civic2022.jpeg",
-      mileage: "15k miles",
-      shipping: "Free Shipping",
-      delivery: "Get it Sunday",
-      path: "/inventory/civic2022"
-    },
-    {
-      id: 'pilot2021',
-      title: "2021 Honda Pilot",
-      price: 28990,
-      image: "/cars/pilot2021.jpeg",
-      mileage: "32k miles",
-      shipping: "Free Shipping",
-      delivery: "Get it Monday",
-      path: "/inventory/pilot2021"
-    },
-    {
-      id: 'accord2020',
-      title: "2020 Honda Accord EX Sedan 4D",
-      price: 14200,
-      image: "/cars/accord2020.jpg",
-      mileage: "47,267 miles",
-      shipping: "Free Shipping",
-      delivery: "Get it Monday",
-      path: "/inventory/accord2020"
-    },
-    {
-      id: 'accord2015',
-      title: "2015 Honda Accord EX Sedan 4D",
-      price: 9700,
-      image: "/cars/accord2015.jpg",
-      mileage: "85,810 miles",
-      shipping: "Free Shipping",
-      delivery: "Get it Monday",
-      path: "/inventory/accord2015"
-    }
-  ];
-
-  const reviews = [
-    {
-      id: 1,
-      name: "Michael",
-      date: "August 29, 2024",
-      rating: 5,
-      notable: ["Communication", "Pricing"],
-      content: "Responded quickly to questions and was very accommodating with multiple visits to look over the vehicle. Was VERY IMPRESSED that he addressed something we were concerned about in less than 24 hrs. Easy to do business with and I would recommend if he has a vehicle that fits your needs."
-    },
-    {
-      id: 2,
-      name: "Jenny",
-      date: "May 20, 2024",
-      rating: 5,
-      notable: ["Punctuality", "Communication", "Pricing", "Item Description"],
-      content: "Everything was excellent!!"
-    },
-    {
-      id: 3,
-      name: "Lynwood",
-      date: "October 17, 2024",
-      rating: 5,
-      notable: ["Punctuality", "Communication", "Pricing", "Item Description"],
-      content: "Great experience,very honest gentleman would highly recommend buying car from this car place. Best experience in 40 years!"
-    },
-    {
-      id: 4,
-      name: "Richard",
-      date: "October 10, 2024",
-      rating: 5,
-      notable: ["Punctuality", "Communication", "Pricing", "Item Description"],
-      content: "He is a honest business man. The vehicle I purchased exceeded my expectation. He is very knowledgeable person and very fair with his pricing. I plan on purchasing from him again. I highly recommend him."
-    },
-    {
-      id: 5,
-      name: "John",
-      date: "February 21, 2025",
-      rating: 5,
-      notable: ["Communication"],
-      content: "I didn't purchase vehicle but the communications was outstanding."
-    },
-    {
-      id: 6,
-      name: "Carlton",
-      date: "November 23, 2024",
-      rating: 5,
-      notable: ["Punctuality", "Communication", "Pricing", "Item Description"],
-      content: "My purchase was as described. Vehicle was exactly as listed and passed both a professional mechanic and personal inspection. Vehicle was priced to sell (and I bought it). I was very happy with the overall experience with Oladimeji. He was very patient and answered all my questions, as well addressed all my concerns. Look forward to do business with him in the future."
-    }
-  ];
-
-  const handleSearch = (e) => {
+  const onSearch = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      // Create a search-friendly version of the query
-      const formattedQuery = searchQuery.trim().toLowerCase();
-      
-      // First check if the search matches any of our sample cars
-      const matchingCar = sampleCars.find(car => {
-        const searchableText = `${car.title} ${car.mileage}`.toLowerCase();
-        return searchableText.includes(formattedQuery);
-      });
+    const q = query.trim();
+    navigate(q ? `/vehicles?q=${encodeURIComponent(q)}` : '/vehicles');
+  };
 
-      if (matchingCar) {
-        // If we find a direct match, navigate to that car's page
-        navigate(matchingCar.path);
-      } else {
-        // If no direct match, navigate to inventory with search query
-        navigate(`/inventory?search=${encodeURIComponent(formattedQuery)}`);
-      }
-    }
+  const counts = {
+    SUV: vehicles.filter((v) => v.body === 'SUV').length,
+    Sedan: vehicles.filter((v) => v.body === 'Sedan').length,
   };
 
   return (
-    <div className="home">
-      <div className="hero">
-        <h1>Find Your Next Ride at Banky Auto</h1>
-        <p>Explore our curated selection of quality salvage vehicles. Each vehicle has been carefully inspected and documented.</p>
-        <form className="search-bar" onSubmit={handleSearch}>
-          <input 
-            type="text" 
-            placeholder="Search by make, model, or year..." 
-            className="search-input"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button type="submit" className="search-button">
-            Search
-          </button>
-        </form>
-        <button 
-          className="start-journey-button"
-          onClick={() => navigate('/inventory')}
-        >
-          Start Your Journey
-        </button>
-      </div>
+    <>
+      {/* Hero */}
+      <section className="hero">
+        <div className="container hero__grid">
+          <div className="hero__copy">
+            <span className="eyebrow rise">Raleigh, NC · Since 2020</span>
+            <h1 className="h1 rise rise-2">
+              Honest cars.
+              <br />
+              <span className="hero__accent">Fair prices.</span>
+            </h1>
+            <p className="lead rise rise-3">
+              Quality used and rebuilt vehicles, inspected and photographed in detail, with upfront prices from{' '}
+              {formatPrice(lowestPrice)}.
+            </p>
 
-      <div className="featured-cars">
-        <h2>Featured Vehicles</h2>
-        <div className="car-grid">
-          {sampleCars.map(car => (
-            <Link to={car.path} key={car.id} className="car-card">
-              <img src={car.image} alt={car.title} />
-              <div className="car-details">
-                <h3>{car.title}</h3>
-                <div className="car-meta">
-                  <span>{car.mileage}</span>
-                  <span>{car.shipping}</span>
-                </div>
-                <div className="car-price">${car.price.toLocaleString()}</div>
-                <button className="view-details">View Details</button>
-              </div>
+            <form className="hero__search rise rise-4" onSubmit={onSearch} role="search">
+              <Icon name="search" size={20} className="hero__search-icon" />
+              <label htmlFor="hero-search" className="sr-only">
+                Search inventory
+              </label>
+              <input
+                id="hero-search"
+                type="search"
+                placeholder="Search make, model or year"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button type="submit" className="btn btn--accent">
+                Search
+              </button>
+            </form>
+
+            <div className="hero__quick rise rise-4">
+              {quickLinks.map((q) => (
+                <Link key={q.label} to={q.to} className="chip hero__chip">
+                  {q.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="hero__visual rise rise-3">
+            <div className="hero__frame">
+              <img src={heroCar.photos[0]} alt={`${vehicleName(heroCar)} ${heroCar.trim}`} />
+            </div>
+            <Link to={`/vehicles/${heroCar.id}`} className="hero__float hero__float--car">
+              <span className="muted">Featured</span>
+              <strong>
+                {vehicleName(heroCar)} {heroCar.trim}
+              </strong>
+              <span className="hero__float-row">
+                <span className="hero__float-price">{formatPrice(heroCar.price)}</span>
+                <span className="chip">{heroCar.mileage.toLocaleString()} mi</span>
+              </span>
             </Link>
-          ))}
-        </div>
-      </div>
-
-      <div className="customer-reviews">
-        <h2>What Our Customers Say</h2>
-        <div className="reviews-grid">
-          {reviews.map(review => (
-            <div key={review.id} className="review-card">
-              <div className="review-header">
-                <div className="reviewer-info">
-                  <h3>{review.name}</h3>
-                  <span className="review-date">{review.date}</span>
-                </div>
-                <div className="rating">
-                  {[...Array(review.rating)].map((_, i) => (
-                    <span key={i} className="star">★</span>
-                  ))}
-                </div>
-              </div>
-              <div className="notable-tags">
-                {review.notable.map((tag, index) => (
-                  <span key={index} className="tag">Notable: {tag}</span>
+            <div className="hero__float hero__float--rating">
+              <span className="hero__stars" aria-hidden="true">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <Icon key={i} name="star" size={16} filled strokeWidth={0} />
                 ))}
+              </span>
+              <span>
+                <strong>5.0</strong> from {reviews.length} customer reviews
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Promises */}
+      <section className="promises">
+        <div className="container promises__grid">
+          {promises.map((p) => (
+            <div key={p.title} className="promise">
+              <span className="icon-tile">
+                <Icon name={p.icon} size={22} />
+              </span>
+              <div>
+                <h3>{p.title}</h3>
+                <p>{p.text}</p>
               </div>
-              <p className="review-content">{review.content}</p>
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </section>
+
+      {/* Featured inventory */}
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <span className="eyebrow">Featured inventory</span>
+              <h2 className="h2">Ready to drive home</h2>
+            </div>
+            <Link to="/vehicles" className="text-link">
+              View all {vehicles.length} vehicles <Icon name="arrowRight" size={16} />
+            </Link>
+          </div>
+          <div className="vgrid">
+            {featured.map((v) => (
+              <VehicleCard key={v.id} vehicle={v} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Browse by type */}
+      <section className="section--tight">
+        <div className="container">
+          <div className="types">
+            <Link to="/vehicles?body=SUV" className="type type--suv">
+              <img src={vehicles.find((v) => v.id === 'pilot2021').photos[0]} alt="" />
+              <div className="type__label">
+                <span className="chip chip--glass">{counts.SUV} available</span>
+                <h3>SUVs</h3>
+                <span className="type__go">
+                  Shop SUVs <Icon name="arrowRight" size={16} />
+                </span>
+              </div>
+            </Link>
+            <Link to="/vehicles?body=Sedan" className="type type--sedan">
+              <img src={vehicles.find((v) => v.id === 'civic2022').photos[0]} alt="" />
+              <div className="type__label">
+                <span className="chip chip--glass">{counts.Sedan} available</span>
+                <h3>Sedans</h3>
+                <span className="type__go">
+                  Shop sedans <Icon name="arrowRight" size={16} />
+                </span>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="section section--ink home-steps">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <span className="eyebrow">How it works</span>
+              <h2 className="h2">Buying a car shouldn’t be complicated</h2>
+            </div>
+            <Link to="/how-it-works" className="btn btn--outline-light">
+              Learn more <Icon name="arrowRight" size={16} className="icon-slide" />
+            </Link>
+          </div>
+          <ol className="steps">
+            {steps.map((s, i) => (
+              <li key={s.title} className="step">
+                <span className="step__num">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <span className="eyebrow">Customer reviews</span>
+              <h2 className="h2">Don’t just take our word for it</h2>
+            </div>
+            <div className="rating-summary">
+              <span className="rating-summary__score">5.0</span>
+              <span>
+                <span className="hero__stars" aria-label="5 out of 5 stars">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <Icon key={i} name="star" size={16} filled strokeWidth={0} />
+                  ))}
+                </span>
+                <span className="muted">{reviews.length} customer reviews</span>
+              </span>
+            </div>
+          </div>
+          <div className="reviews">
+            {reviews.map((r) => (
+              <figure key={r.name} className="review">
+                <span className="hero__stars" aria-label="5 out of 5 stars">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <Icon key={i} name="star" size={15} filled strokeWidth={0} />
+                  ))}
+                </span>
+                <blockquote>“{r.content}”</blockquote>
+                <figcaption>
+                  <span className="review__avatar" aria-hidden="true">
+                    {r.name[0]}
+                  </span>
+                  <span>
+                    <strong>{r.name}</strong>
+                    <span className="muted">{r.date}</span>
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CtaBand />
+    </>
   );
 }
 

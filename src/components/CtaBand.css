@@ -1,0 +1,37 @@
+.cta-band {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding: clamp(36px, 6vw, 64px);
+  border-radius: var(--radius-xl);
+  background: var(--ink);
+  color: #fff;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.cta-band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(70% 120% at 100% 0%, rgba(255, 91, 31, 0.35), transparent 60%);
+}
+
+.cta-band > div:first-child {
+  max-width: 620px;
+}
+
+.cta-band .lead {
+  margin-top: 14px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.cta-band__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
