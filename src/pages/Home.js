@@ -4,15 +4,15 @@ import Icon from '../components/Icon';
 import VehicleCard from '../components/VehicleCard';
 import CtaBand from '../components/CtaBand';
 import SearchSuggest from '../components/SearchSuggest';
-import { vehicles, formatPrice, vehicleName } from '../data/vehicles';
+import { vehicles, formatPrice, vehicleName, pickVehicles } from '../data/vehicles';
 import { reviews } from '../data/reviews';
 import { steps } from '../data/process';
 import './Home.css';
 
-const byId = (id) => vehicles.find((v) => v.id === id);
-const showcase = [byId('pilot2021'), byId('camry2023'), byId('civic2022')];
+const showcase = pickVehicles(['pilot2021', 'camry2023', 'civic2022'], 3);
+const whyCar = pickVehicles(['accord2020'], 1)[0];
 const featured = vehicles.filter((v) => v.featured).slice(0, 6);
-const lowestPrice = Math.min(...vehicles.map((v) => v.price));
+const lowestPrice = vehicles.length ? Math.min(...vehicles.map((v) => v.price)) : null;
 const count = (fn) => vehicles.filter(fn).length;
 
 const categories = [
@@ -63,8 +63,8 @@ function Home() {
             at a price that’s <span className="hero__hl">fair</span>.
           </h1>
           <p className="lead rise rise-3">
-            Quality used and rebuilt cars in Raleigh, NC. Inspected, photographed in detail and priced upfront, from{' '}
-            {formatPrice(lowestPrice)}.
+            Quality used and rebuilt cars in Raleigh, NC. Inspected, photographed in detail and priced upfront
+            {lowestPrice ? `, from ${formatPrice(lowestPrice)}` : ''}.
           </p>
 
           <SearchSuggest className="hero__suggest rise rise-4" />
@@ -166,7 +166,7 @@ function Home() {
       <section className="section">
         <div className="container why">
           <div className="why__media">
-            <img src={byId('accord2020').photos[0]} alt="2020 Honda Accord EX" loading="lazy" />
+            {whyCar && <img src={whyCar.photos[0]} alt={`${vehicleName(whyCar)} ${whyCar.trim}`} loading="lazy" />}
             <div className="why__badge">
               <span className="icon-tile">
                 <Icon name="camera" size={20} />
@@ -217,7 +217,7 @@ function Home() {
           </div>
           <div className="reviews" ref={reviewsRef} tabIndex={0} aria-label="Customer reviews">
             {reviews.map((r) => (
-              <figure key={r.name} className="review">
+              <figure key={r.id || r.name} className="review">
                 <Stars />
                 <blockquote>“{r.content}”</blockquote>
                 <figcaption>

@@ -1,132 +1,21 @@
-// Single source of truth for inventory. Every page reads from here.
-const photo = (file) => `${process.env.PUBLIC_URL}/cars/${file}`;
-const series = (prefix, letters, ext = 'jpg') =>
-  letters.split('').map((l) => photo(`${prefix}${l}.${ext}`));
+import content from '../content/vehicles.json';
 
-export const vehicles = [
-  {
-    id: 'pilot2020',
-    year: 2020,
-    make: 'Honda',
-    model: 'Pilot',
-    trim: 'EX-L',
-    body: 'SUV',
-    price: 17500,
-    mileage: 65458,
-    exteriorColor: 'Silver',
-    interiorColor: 'Grey',
-    transmission: 'Automatic',
-    fuelType: 'Gasoline',
-    featured: true,
-    photos: [photo('pilot2020.jpg'), ...series('pilot2020', 'abcdefghijklmn')],
-    highlights: ['Backup camera', 'Apple CarPlay', 'Third-row seating', 'Paid off'],
-    description:
-      'Well-maintained Honda Pilot EX-L with backup camera and CarPlay. Room for the whole family, and this vehicle is paid off.',
-  },
-  {
-    id: 'camry2023',
-    year: 2023,
-    make: 'Toyota',
-    model: 'Camry',
-    trim: 'SE',
-    body: 'Sedan',
-    price: 22990,
-    mileage: 624,
-    exteriorColor: 'Red',
-    interiorColor: 'Black',
-    transmission: 'Automatic',
-    drivetrain: 'FWD',
-    fuelType: 'Gasoline',
-    titleStatus: 'Salvage',
-    damageHistory: 'Repaired side impact damage',
-    featured: true,
-    photos: [photo('camry.jpeg')],
-    highlights: ['Only 624 miles', 'SE trim', 'Side impact damage repaired'],
-    description: 'Nearly new Toyota Camry SE with extremely low mileage. Side impact damage has been repaired.',
-  },
-  {
-    id: 'civic2022',
-    year: 2022,
-    make: 'Honda',
-    model: 'Civic',
-    trim: 'EX',
-    body: 'Sedan',
-    price: 21990,
-    mileage: 15984,
-    exteriorColor: 'Gray',
-    interiorColor: 'Black',
-    transmission: 'Automatic',
-    drivetrain: 'FWD',
-    fuelType: 'Gasoline',
-    featured: true,
-    photos: [photo('civic2022.jpeg')],
-    highlights: ['Low mileage', 'EX trim', 'Automatic transmission'],
-    description: 'Sporty and efficient Honda Civic EX in excellent condition.',
-  },
-  {
-    id: 'pilot2021',
-    year: 2021,
-    make: 'Honda',
-    model: 'Pilot',
-    trim: 'EX-L',
-    body: 'SUV',
-    price: 28990,
-    mileage: 32000,
-    exteriorColor: 'Black',
-    interiorColor: 'Gray',
-    transmission: 'Automatic',
-    drivetrain: 'AWD',
-    fuelType: 'Gasoline',
-    featured: true,
-    photos: [photo('pilot2021.jpeg')],
-    highlights: ['All-wheel drive', 'Leather interior', 'Third-row seating'],
-    description: 'Spacious and versatile Honda Pilot, perfect for families.',
-  },
-  {
-    id: 'accord2020',
-    year: 2020,
-    make: 'Honda',
-    model: 'Accord',
-    trim: 'EX',
-    body: 'Sedan',
-    price: 14200,
-    mileage: 47267,
-    exteriorColor: 'Blue',
-    interiorColor: 'Beige',
-    transmission: 'Automatic',
-    drivetrain: 'FWD',
-    fuelType: 'Gasoline',
-    vin: '1HGCV1F49LA072295',
-    safetyRating: '5-star overall NHTSA rating',
-    featured: true,
-    photos: [photo('accord2020.jpg'), ...series('accord2020', 'abcdefij')],
-    highlights: ['Blind spot monitor', 'Lane departure warning', 'Backup camera', 'Paid off'],
-    description:
-      'Runs and drives great. Features include a backup camera, blind spot monitor and lane departure warning. This vehicle is paid off.',
-  },
-  {
-    id: 'accord2015',
-    year: 2015,
-    make: 'Honda',
-    model: 'Accord',
-    trim: 'EX',
-    body: 'Sedan',
-    price: 9700,
-    mileage: 85810,
-    exteriorColor: 'White',
-    interiorColor: 'Tan',
-    transmission: 'Automatic',
-    drivetrain: 'FWD',
-    fuelType: 'Gasoline',
-    vin: '1HGCR2F77FA165315',
-    safetyRating: '5-star overall NHTSA rating',
-    featured: true,
-    photos: [photo('accord2015.jpg'), ...series('accord2015', 'abcdefghijkl')],
-    highlights: ['Moonroof', 'LaneWatch blind spot camera', 'Backup camera', 'Paid off'],
-    description:
-      'Runs and drives great. Features include a backup camera, blind spot camera, moonroof and cloth seats. This vehicle is paid off.',
-  },
-];
+// Inventory lives in src/content/vehicles.json, which the admin portal edits.
+// Photos are file names inside public/cars/.
+export const photoUrl = (file) => (/^(https?:|data:|blob:)/.test(file) ? file : `${process.env.PUBLIC_URL}/cars/${file}`);
+
+export const allVehicles = content.map((v) => ({ ...v, photos: (v.photos || []).map(photoUrl) }));
+
+// Sold cars are hidden from listings but their pages still load (marked sold).
+export const vehicles = allVehicles.filter((v) => v.status !== 'sold' && v.photos.length > 0);
+
+// Prefer the named cars, then fill any gaps with other listed cars, so pages
+// keep working when the owner sells or removes one.
+export const pickVehicles = (ids, count = ids.length) => {
+  const picked = ids.map((id) => vehicles.find((v) => v.id === id)).filter(Boolean);
+  const rest = vehicles.filter((v) => !picked.includes(v));
+  return [...picked, ...rest].slice(0, count);
+};
 
 export const vehicleName = (v) => `${v.year} ${v.make} ${v.model}`;
 
@@ -135,7 +24,7 @@ export const formatPrice = (n) =>
 
 export const formatMiles = (n) => `${n.toLocaleString('en-US')} mi`;
 
-export const getVehicle = (id) => vehicles.find((v) => v.id === id);
+export const getVehicle = (id) => allVehicles.find((v) => v.id === id);
 
 export const matchesQuery = (v, query) => {
   const q = query.trim().toLowerCase();

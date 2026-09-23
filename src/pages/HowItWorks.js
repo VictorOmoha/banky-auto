@@ -4,10 +4,10 @@ import Icon from '../components/Icon';
 import PageHeader from '../components/PageHeader';
 import CtaBand from '../components/CtaBand';
 import { steps } from '../data/process';
-import { vehicles } from '../data/vehicles';
+import { pickVehicles, vehicleName } from '../data/vehicles';
 import './Pages.css';
 
-const showcase = vehicles.find((v) => v.id === 'accord2020');
+const showcase = pickVehicles(['accord2020'], 1)[0];
 
 const details = [
   { icon: 'camera', title: 'Full photo sets', text: 'Up to 15 photos per car, inside and out, so you know what you’re looking at before you visit.' },
@@ -55,7 +55,7 @@ function HowItWorks() {
       <section className="section section--surface">
         <div className="container split">
           <div className="split__media">
-            <img src={showcase.photos[0]} alt="2020 Honda Accord EX" loading="lazy" />
+            {showcase && <img src={showcase.photos[0]} alt={`${vehicleName(showcase)} ${showcase.trim}`} loading="lazy" />}
           </div>
           <div>
             <span className="eyebrow">What you can expect</span>

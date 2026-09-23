@@ -93,3 +93,30 @@
     gap: 36px;
   }
 }
+
+.footer__bottom-links {
+  margin-left: auto;
+}
+
+.footer__owner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  font-weight: 700;
+  color: var(--ink-soft);
+  transition: border-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+
+.footer__owner:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .footer__bottom-links {
+    margin-left: 0;
+  }
+}

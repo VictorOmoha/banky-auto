@@ -75,6 +75,11 @@ function Footer() {
           <p>
             © {year} {site.legalName}. All rights reserved.
           </p>
+          <div className="footer__bottom-links">
+            <Link to="/admin" className="footer__owner">
+              <Icon name="key" size={14} /> Owner login
+            </Link>
+          </div>
           <ul className="footer__social">
             {site.socials.map((s) => (
               <li key={s.label}>

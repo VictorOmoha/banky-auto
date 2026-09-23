@@ -18,6 +18,17 @@ function Gallery({ photos, name }) {
 
   useEffect(() => setIndex(0), [photos]);
 
+  if (!count) {
+    return (
+      <div className="gallery">
+        <div className="gallery__stage gallery__stage--empty">
+          <Icon name="camera" size={40} strokeWidth={1.25} />
+          <span>Photos coming soon</span>
+        </div>
+      </div>
+    );
+  }
+
   const onKeyDown = (e) => {
     if (e.key === 'ArrowRight') go(1);
     if (e.key === 'ArrowLeft') go(-1);
@@ -83,11 +94,16 @@ function VehicleDetail() {
     };
   }, [vehicle]);
 
-  if (!vehicle) return <NotFound title="We couldn’t find that car" text="It may have sold already. Take a look at what’s available now." />;
+  if (!vehicle)
+    return <NotFound title="We couldn’t find that car" text="It may have sold already. Take a look at what’s available now." />;
 
   const name = vehicleName(vehicle);
+  const isSold = vehicle.status === 'sold';
   const fullName = `${name} ${vehicle.trim}`;
-  const related = vehicles.filter((v) => v.id !== vehicle.id).sort((a, b) => (b.body === vehicle.body) - (a.body === vehicle.body)).slice(0, 3);
+  const related = vehicles
+    .filter((v) => v.id !== vehicle.id)
+    .sort((a, b) => (b.body === vehicle.body) - (a.body === vehicle.body))
+    .slice(0, 3);
 
   const specs = [
     ['Year', vehicle.year],
@@ -105,7 +121,6 @@ function VehicleDetail() {
     ['Safety', vehicle.safetyRating],
     ['VIN', vehicle.vin],
   ].filter(([, value]) => value);
-
 
   const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
@@ -153,6 +168,7 @@ function VehicleDetail() {
             <div className="buybox card">
               <div className="buybox__tags">
                 <span className="chip">{vehicle.body}</span>
+                {isSold && <span className="chip chip--sold">Sold</span>}
                 {vehicle.titleStatus && <span className="chip chip--warn">{vehicle.titleStatus} title</span>}
               </div>
               <h1 className="buybox__title">{name}</h1>
@@ -180,25 +196,34 @@ function VehicleDetail() {
                 </li>
               </ul>
 
-              <div className="buybox__actions">
-                <button type="button" className="btn btn--accent btn--lg btn--block" onClick={openModal}>
-                  <Icon name="calendar" size={18} /> Schedule a test drive
-                </button>
-                <div className="buybox__row">
-                  <ContactLink type="call" className="btn btn--ghost btn--block">
-                    <Icon name="phone" size={16} /> Call
-                  </ContactLink>
-                  <ContactLink
-                    type="email"
-                    email={site.salesEmail}
-                    subject={`Question about the ${fullName}`}
-                    body={`Hi, I'm interested in the ${fullName} listed at ${formatPrice(vehicle.price)}.\n\n`}
-                    className="btn btn--ghost btn--block"
-                  >
-                    <Icon name="mail" size={16} /> Email
-                  </ContactLink>
+              {isSold ? (
+                <div className="buybox__actions">
+                  <p className="buybox__sold">This car has been sold. Take a look at what’s available now.</p>
+                  <Link to="/vehicles" className="btn btn--accent btn--lg btn--block">
+                    Browse available cars <Icon name="arrowRight" size={18} className="icon-slide" />
+                  </Link>
                 </div>
-              </div>
+              ) : (
+                <div className="buybox__actions">
+                  <button type="button" className="btn btn--accent btn--lg btn--block" onClick={openModal}>
+                    <Icon name="calendar" size={18} /> Schedule a test drive
+                  </button>
+                  <div className="buybox__row">
+                    <ContactLink type="call" className="btn btn--ghost btn--block">
+                      <Icon name="phone" size={16} /> Call
+                    </ContactLink>
+                    <ContactLink
+                      type="email"
+                      email={site.salesEmail}
+                      subject={`Question about the ${fullName}`}
+                      body={`Hi, I'm interested in the ${fullName} listed at ${formatPrice(vehicle.price)}.\n\n`}
+                      className="btn btn--ghost btn--block"
+                    >
+                      <Icon name="mail" size={16} /> Email
+                    </ContactLink>
+                  </div>
+                </div>
+              )}
 
               <ul className="buybox__assure">
                 <li>
@@ -279,43 +304,88 @@ function VehicleDetail() {
       </section>
 
       <Modal open={modalOpen} onClose={closeModal} title="Schedule a test drive">
-          <form className="form-grid" onSubmit={onSubmit}>
-            <p className="span-2 muted">
-              {fullName} · {formatPrice(vehicle.price)}
-            </p>
-            <div className="field span-2">
-              <label htmlFor="td-name">Full name</label>
-              <input id="td-name" name="name" className="input" autoComplete="name" required value={form.name} onChange={onChange} />
-            </div>
-            <div className="field">
-              <label htmlFor="td-email">Email</label>
-              <input id="td-email" name="email" type="email" className="input" autoComplete="email" required value={form.email} onChange={onChange} />
-            </div>
-            <div className="field">
-              <label htmlFor="td-phone">Phone</label>
-              <input id="td-phone" name="phone" type="tel" className="input" autoComplete="tel" required value={form.phone} onChange={onChange} />
-            </div>
-            <div className="field">
-              <label htmlFor="td-date">Preferred date</label>
-              <input id="td-date" name="date" type="date" min={today} className="input" required value={form.date} onChange={onChange} />
-            </div>
-            <div className="field">
-              <label htmlFor="td-time">Preferred time</label>
-              <input id="td-time" name="time" type="time" min="09:00" max="18:00" className="input" required value={form.time} onChange={onChange} />
-            </div>
-            <div className="field span-2">
-              <label htmlFor="td-comments">
-                Comments <span className="hint">(optional)</span>
-              </label>
-              <textarea id="td-comments" name="comments" rows="3" className="textarea" value={form.comments} onChange={onChange} />
-            </div>
-            <div className="span-2">
-              <button type="submit" className="btn btn--accent btn--lg btn--block">
-                Send request
-              </button>
-              <p className="form-note muted">Next, you’ll choose how to send it: Gmail, Outlook, your email app, or copy it.</p>
-            </div>
-          </form>
+        <form className="form-grid" onSubmit={onSubmit}>
+          <p className="span-2 muted">
+            {fullName} · {formatPrice(vehicle.price)}
+          </p>
+          <div className="field span-2">
+            <label htmlFor="td-name">Full name</label>
+            <input
+              id="td-name"
+              name="name"
+              className="input"
+              autoComplete="name"
+              required
+              value={form.name}
+              onChange={onChange}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="td-email">Email</label>
+            <input
+              id="td-email"
+              name="email"
+              type="email"
+              className="input"
+              autoComplete="email"
+              required
+              value={form.email}
+              onChange={onChange}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="td-phone">Phone</label>
+            <input
+              id="td-phone"
+              name="phone"
+              type="tel"
+              className="input"
+              autoComplete="tel"
+              required
+              value={form.phone}
+              onChange={onChange}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="td-date">Preferred date</label>
+            <input
+              id="td-date"
+              name="date"
+              type="date"
+              min={today}
+              className="input"
+              required
+              value={form.date}
+              onChange={onChange}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="td-time">Preferred time</label>
+            <input
+              id="td-time"
+              name="time"
+              type="time"
+              min="09:00"
+              max="18:00"
+              className="input"
+              required
+              value={form.time}
+              onChange={onChange}
+            />
+          </div>
+          <div className="field span-2">
+            <label htmlFor="td-comments">
+              Comments <span className="hint">(optional)</span>
+            </label>
+            <textarea id="td-comments" name="comments" rows="3" className="textarea" value={form.comments} onChange={onChange} />
+          </div>
+          <div className="span-2">
+            <button type="submit" className="btn btn--accent btn--lg btn--block">
+              Send request
+            </button>
+            <p className="form-note muted">Next, you’ll choose how to send it: Gmail, Outlook, your email app, or copy it.</p>
+          </div>
+        </form>
       </Modal>
     </div>
   );
