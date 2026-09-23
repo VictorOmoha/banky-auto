@@ -141,5 +141,6 @@ export const matchesQuery = (v, query) => {
   const q = query.trim().toLowerCase();
   if (!q) return true;
   const text = `${v.year} ${v.make} ${v.model} ${v.trim} ${v.body} ${v.exteriorColor}`.toLowerCase();
-  return q.split(/\s+/).every((word) => text.includes(word));
+  // Tolerate simple plurals, so "suvs" or "hondas" still match.
+  return q.split(/\s+/).every((word) => text.includes(word) || (word.length > 3 && word.endsWith('s') && text.includes(word.slice(0, -1))));
 };

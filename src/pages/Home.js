@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import Icon from '../components/Icon';
 import VehicleCard from '../components/VehicleCard';
 import CtaBand from '../components/CtaBand';
+import SearchSuggest from '../components/SearchSuggest';
 import { vehicles, formatPrice, vehicleName } from '../data/vehicles';
 import { reviews } from '../data/reviews';
 import { steps } from '../data/process';
@@ -41,15 +42,7 @@ function Stars({ size = 16 }) {
 }
 
 function Home() {
-  const navigate = useNavigate();
-  const [query, setQuery] = useState('');
   const reviewsRef = useRef(null);
-
-  const onSearch = (e) => {
-    e.preventDefault();
-    const q = query.trim();
-    navigate(q ? `/vehicles?q=${encodeURIComponent(q)}` : '/vehicles');
-  };
 
   const scrollReviews = (dir) => {
     const el = reviewsRef.current;
@@ -74,22 +67,7 @@ function Home() {
             {formatPrice(lowestPrice)}.
           </p>
 
-          <form className="hero__search rise rise-4" onSubmit={onSearch} role="search">
-            <Icon name="search" size={22} className="hero__search-icon" />
-            <label htmlFor="hero-search" className="sr-only">
-              Search inventory
-            </label>
-            <input
-              id="hero-search"
-              type="search"
-              placeholder="Search by make, model or year"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <button type="submit" className="btn btn--accent btn--lg">
-              Search cars
-            </button>
-          </form>
+          <SearchSuggest className="hero__suggest rise rise-4" />
 
           <div className="hero__popular rise rise-4">
             <span>Popular:</span>
