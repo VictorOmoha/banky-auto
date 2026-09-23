@@ -25,7 +25,7 @@ function PublishBanner() {
     queued: ['Saved. Publishing to your live site…', 'Usually takes 1–3 minutes.'],
     publishing: ['Saved. Publishing to your live site…', 'Usually takes 1–3 minutes.'],
     success: ['Published! Your changes are live.', 'Refresh the live site to see them.'],
-    failure: ['Saved, but publishing failed.', 'Your change is safe on GitHub. Open the build log to see why.'],
+    failure: ['Saved, but the website didn’t update.', 'Your change is safe. Please let your web developer know.'],
     unknown: ['Saved.', 'Your live site updates automatically in a few minutes.'],
   }[deploy.state];
   const busy = deploy.state === 'queued' || deploy.state === 'publishing';
@@ -37,11 +37,6 @@ function PublishBanner() {
       <span>
         <strong>{text[0]}</strong> {text[1]}
       </span>
-      {deploy.url && (
-        <a href={deploy.url} target="_blank" rel="noopener noreferrer" className="publish__link">
-          Details <Icon name="external" size={14} />
-        </a>
-      )}
     </div>
   );
 }
@@ -97,10 +92,12 @@ function Shell() {
           </a>
           {user && (
             <div className="admin__user">
-              <img src={user.avatar} alt="" />
+              <span className="admin__avatar" aria-hidden="true">
+                {(user.name || user.email || '?')[0].toUpperCase()}
+              </span>
               <span>
                 <strong>{user.name}</strong>
-                <span>@{user.login}</span>
+                <span>{user.email}</span>
               </span>
             </div>
           )}
@@ -131,7 +128,7 @@ function Shell() {
         {phase === 'loading' && (
           <div className="admin-center admin-center--page">
             <span className="admin-spinner" aria-label="Loading" />
-            <p className="muted">Loading your site content from GitHub…</p>
+            <p className="muted">Loading your cars and site info…</p>
           </div>
         )}
         {phase === 'error' && (
@@ -143,7 +140,7 @@ function Shell() {
                   Try again
                 </button>
                 <button type="button" className="btn btn--ghost" onClick={signOut}>
-                  Use a different token
+                  Sign in again
                 </button>
               </div>
             </div>

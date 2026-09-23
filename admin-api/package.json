@@ -1,0 +1,5 @@
+{
+  "name": "banky-auto-admin-api",
+  "private": true,
+  "description": "Login and save API for the Banky Auto admin portal (Vercel serverless functions)"
+}

@@ -26,7 +26,7 @@ function Dashboard() {
     <div className="admin-page">
       <div className="admin-head">
         <div>
-          <h1 className="admin-title">Welcome back{user?.name ? `, ${user.name.split(' ')[0]}` : ''}</h1>
+          <h1 className="admin-title">Welcome back{user?.name && user.name !== 'Owner' ? `, ${user.name.split(' ')[0]}` : ''}</h1>
           <p className="muted">Here’s what’s on your lot right now.</p>
         </div>
         <Link to="/admin/cars/new" className="btn btn--accent">

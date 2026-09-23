@@ -1076,3 +1076,30 @@
     grid-column: 1 / -1;
   }
 }
+
+.admin__avatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--sky), var(--accent));
+  color: #fff;
+  font-weight: 800;
+}
+
+.admin__user > span:last-child {
+  overflow: hidden;
+}
+
+.admin__user span span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-login__foot {
+  font-size: 14px;
+  text-align: center;
+}

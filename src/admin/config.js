@@ -1,5 +1,8 @@
-// Where the admin portal reads and saves content. Saving commits to this
-// branch; the "Deploy site" GitHub Action then rebuilds the live site.
+// The admin portal talks to a small API on Vercel (see admin-api/), which
+// holds the GitHub key and commits changes to this branch. The "Deploy site"
+// GitHub Action then rebuilds the live site.
+export const apiBase = (process.env.REACT_APP_ADMIN_API || 'https://banky-auto-admin-api.vercel.app').replace(/\/$/, '');
+
 export const repo = {
   owner: 'VictorOmoha',
   name: 'banky-auto',
@@ -12,8 +15,3 @@ export const paths = {
   reviews: 'src/content/reviews.json',
   photos: 'public/cars',
 };
-
-export const repoUrl = `https://github.com/${repo.owner}/${repo.name}`;
-
-// Pre-filled form for creating a token that can only edit this repository.
-export const newTokenUrl = 'https://github.com/settings/personal-access-tokens/new';

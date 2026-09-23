@@ -1,4 +1,4 @@
-import { repo, paths } from './config';
+import { paths, repo } from './config';
 
 export const slugify = (text) =>
   String(text)

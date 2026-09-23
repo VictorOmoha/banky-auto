@@ -1,9 +1,9 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { commitFiles, latestDeploy, readJson, verifyToken } from './github';
+import { commitFiles, latestDeploy, login, me, readJson } from './api';
 import { paths } from './config';
 
 const AdminContext = createContext(null);
-const STORAGE_KEY = 'banky-admin-token';
+const STORAGE_KEY = 'banky-admin-session';
 
 const storage = {
   get() {
@@ -59,13 +59,12 @@ export function AdminProvider({ children }) {
   }, []);
 
   const signIn = useCallback(
-    async (tok, remember) => {
-      const clean = tok.trim();
-      const profile = await verifyToken(clean);
-      storage.set(clean, remember);
-      setToken(clean);
+    async (email, password, remember) => {
+      const { token: session, user: profile } = await login(email.trim(), password);
+      storage.set(session, remember);
+      setToken(session);
       setUser(profile);
-      await load(clean);
+      await load(session);
     },
     [load]
   );
@@ -87,7 +86,7 @@ export function AdminProvider({ children }) {
       setPhase('signed-out');
       return;
     }
-    verifyToken(saved)
+    me(saved)
       .then((profile) => {
         setToken(saved);
         setUser(profile);
@@ -117,7 +116,7 @@ export function AdminProvider({ children }) {
             setDeploy({ state: 'publishing', url: run.url, at: started });
           }
         } catch {
-          // Token may lack Actions access; fall back to a time-based message.
+          // Status unavailable; fall back to a time-based message.
           setDeploy({ state: 'unknown', at: started });
           return;
         }
@@ -135,15 +134,20 @@ export function AdminProvider({ children }) {
    */
   const save = useCallback(
     async ({ key, mutate, message, extraFiles }) => {
-      const fresh = await readJson(token, paths[key]);
-      const next = mutate(fresh);
-      const files = [{ path: paths[key], text: toJsonText(next) }, ...(extraFiles ? extraFiles(next, fresh) : [])];
-      const sha = await commitFiles(token, message, files);
-      setContent((c) => ({ ...c, [key]: next }));
-      watchDeploy(token, sha);
-      return next;
+      try {
+        const fresh = await readJson(token, paths[key]);
+        const next = mutate(fresh);
+        const files = [{ path: paths[key], text: toJsonText(next) }, ...(extraFiles ? extraFiles(next, fresh) : [])];
+        const sha = await commitFiles(token, message, files);
+        setContent((c) => ({ ...c, [key]: next }));
+        watchDeploy(token, sha);
+        return next;
+      } catch (err) {
+        if (err.status === 401) signOut();
+        throw err;
+      }
     },
-    [token, watchDeploy]
+    [token, watchDeploy, signOut]
   );
 
   const value = { token, user, phase, error, content, deploy, signIn, signOut, reload: () => load(token), save };
