@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Icon from '../components/Icon';
 import PageHeader from '../components/PageHeader';
-import { site, fullAddress, mapsUrl, mapEmbedUrl, mailto } from '../data/site';
+import LocationMap from '../components/LocationMap';
+import { site, fullAddress, mapsUrl, mailto } from '../data/site';
 import './Pages.css';
 
 const empty = { name: '', email: '', phone: '', subject: '', message: '' };
@@ -164,12 +165,7 @@ function Contact() {
         </div>
 
         <div className="container">
-          <div className="map card">
-            <iframe title={`Map showing ${site.legalName}`} src={mapEmbedUrl} loading="lazy" />
-            <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="btn btn--light map__btn">
-              <Icon name="pin" size={16} /> Get directions
-            </a>
-          </div>
+          <LocationMap />
         </div>
       </section>
     </>

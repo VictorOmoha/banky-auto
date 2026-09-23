@@ -30,6 +30,8 @@ export const fullAddress = `${site.address.line1}, ${site.address.city}, ${site.
 
 export const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
 
+export const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
+
 // Map embed located by address, so the pin follows any address change.
 export const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(fullAddress)}&z=15&output=embed`;
 
