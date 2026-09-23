@@ -21,7 +21,7 @@
 
 .suggest__bar:focus-within {
   border-color: var(--accent);
-  box-shadow: var(--shadow-lg), 0 0 0 5px rgba(31, 94, 255, 0.14);
+  box-shadow: var(--shadow-lg), 0 0 0 5px rgba(23, 66, 176, 0.14);
 }
 
 .suggest__icon {
