@@ -9,12 +9,11 @@ export const site = {
   salesEmail: 'sales@bankyauto.com',
   careersEmail: 'info@bankyauto.com',
   address: {
-    line1: '5847 McHines Pl, Ste D',
+    line1: '301 Circle Ln',
     city: 'Raleigh',
     region: 'NC',
-    zip: '27616',
+    zip: '27603',
   },
-  coords: { lat: 35.8544, lng: -78.58 },
   hours: [
     { days: 'Mon – Sat', time: '9:00 AM – 6:00 PM' },
     { days: 'Sunday', time: 'Closed' },
@@ -29,9 +28,10 @@ export const site = {
 
 export const fullAddress = `${site.address.line1}, ${site.address.city}, ${site.address.region} ${site.address.zip}`;
 
-export const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  `${site.legalName} ${fullAddress}`
-)}`;
+export const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+
+// Map embed located by address, so the pin follows any address change.
+export const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(fullAddress)}&z=15&output=embed`;
 
 // Opens the visitor's email app with a pre-filled message. The site has no
 // backend, so forms hand off to email instead of pretending to submit.

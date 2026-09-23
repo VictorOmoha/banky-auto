@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import Icon from '../components/Icon';
 import PageHeader from '../components/PageHeader';
-import { site, fullAddress, mapsUrl, mailto } from '../data/site';
+import { site, fullAddress, mapsUrl, mapEmbedUrl, mailto } from '../data/site';
 import './Pages.css';
 
 const empty = { name: '', email: '', phone: '', subject: '', message: '' };
-const { lat, lng } = site.coords;
-const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.012}%2C${lat - 0.006}%2C${lng + 0.012}%2C${lat + 0.006}&layer=mapnik&marker=${lat}%2C${lng}`;
 
 function validate(data) {
   const errors = {};
@@ -167,7 +165,7 @@ function Contact() {
 
         <div className="container">
           <div className="map card">
-            <iframe title={`Map showing ${site.legalName}`} src={mapSrc} loading="lazy" />
+            <iframe title={`Map showing ${site.legalName}`} src={mapEmbedUrl} loading="lazy" />
             <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="btn btn--light map__btn">
               <Icon name="pin" size={16} /> Get directions
             </a>
