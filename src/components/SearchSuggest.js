@@ -56,13 +56,30 @@ function Highlight({ text, query }) {
   );
 }
 
-function SearchSuggest({ placeholder = 'Search by make, model or year', buttonLabel = 'Search cars', className = '' }) {
+// Works uncontrolled (home hero: submitting navigates to results) or
+// controlled via `value`/`onValueChange` (inventory: typing filters live and
+// `onSearch` runs instead of navigating).
+function SearchSuggest({
+  placeholder = 'Search by make, model or year',
+  buttonLabel = 'Search cars',
+  className = '',
+  value,
+  onValueChange,
+  onSearch,
+  showButton = true,
+}) {
   const navigate = useNavigate();
   const id = useId();
   const listId = `${id}-list`;
   const rootRef = useRef(null);
   const inputRef = useRef(null);
-  const [query, setQuery] = useState('');
+  const [innerQuery, setInnerQuery] = useState('');
+  const controlled = value !== undefined;
+  const query = controlled ? value : innerQuery;
+  const setQuery = (next) => {
+    if (!controlled) setInnerQuery(next);
+    onValueChange?.(next);
+  };
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
 
@@ -112,10 +129,21 @@ function SearchSuggest({ placeholder = 'Search by make, model or year', buttonLa
     navigate(to);
   };
 
+  const searchAll = () => {
+    if (onSearch) {
+      setOpen(false);
+      inputRef.current?.blur();
+      onSearch(q);
+    } else {
+      go(q ? `/vehicles?q=${encodeURIComponent(q)}` : '/vehicles');
+    }
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
-    if (open && active >= 0 && options[active]) return go(options[active].to);
-    return go(q ? `/vehicles?q=${encodeURIComponent(q)}` : '/vehicles');
+    const picked = open && active >= 0 ? options[active] : null;
+    if (picked && picked.key !== 'all') return go(picked.to);
+    return searchAll();
   };
 
   const onKeyDown = (e) => {
@@ -153,12 +181,12 @@ function SearchSuggest({ placeholder = 'Search by make, model or year', buttonLa
       className: `suggest__option ${active === i ? 'is-active' : ''}`,
       onMouseEnter: () => setActive(i),
       onMouseDown: (e) => e.preventDefault(),
-      onClick: () => go(to),
+      onClick: () => (to ? go(to) : searchAll()),
     };
   };
 
   return (
-    <div className={`suggest ${showPanel ? 'suggest--open' : ''} ${className}`} ref={rootRef}>
+    <div className={`suggest ${showPanel ? 'suggest--open' : ''} ${showButton ? '' : 'suggest--compact'} ${className}`} ref={rootRef}>
       <form className="suggest__bar" onSubmit={onSubmit} role="search">
         <Icon name="search" size={22} className="suggest__icon" />
         <label htmlFor={`${id}-input`} className="sr-only">
@@ -198,9 +226,11 @@ function SearchSuggest({ placeholder = 'Search by make, model or year', buttonLa
             <Icon name="close" size={16} />
           </button>
         )}
-        <button type="submit" className="btn btn--accent btn--lg suggest__submit">
-          {buttonLabel}
-        </button>
+        {showButton && (
+          <button type="submit" className="btn btn--accent btn--lg suggest__submit">
+            {buttonLabel}
+          </button>
+        )}
       </form>
 
       {showPanel && (
@@ -246,9 +276,10 @@ function SearchSuggest({ placeholder = 'Search by make, model or year', buttonLa
             ))}
 
             {q && (
-              <li {...optionProps(`/vehicles?q=${encodeURIComponent(q)}`)} className={`suggest__option suggest__all ${active === index ? 'is-active' : ''}`}>
+              <li {...optionProps(null)} className={`suggest__option suggest__all ${active === index ? 'is-active' : ''}`}>
                 <span>
-                  {noMatches ? 'No exact matches. Search all cars for' : 'See all results for'} <strong>“{q}”</strong>
+                  {noMatches ? 'No exact matches. Search all cars for' : onSearch ? 'Show all results for' : 'See all results for'}{' '}
+                  <strong>“{q}”</strong>
                 </span>
                 <Icon name="arrowRight" size={18} />
               </li>

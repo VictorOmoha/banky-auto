@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Icon from '../components/Icon';
 import VehicleCard from '../components/VehicleCard';
+import SearchSuggest from '../components/SearchSuggest';
 import { vehicles, matchesQuery } from '../data/vehicles';
 import './Inventory.css';
 
@@ -78,19 +79,14 @@ function Inventory() {
           <span className="eyebrow">Inventory</span>
           <div className="inventory__title">
             <h1 className="h2">Find your next car</h1>
-            <form className="inventory__search" role="search" onSubmit={(e) => e.preventDefault()}>
-              <Icon name="search" size={18} />
-              <label htmlFor="inv-search" className="sr-only">
-                Search inventory
-              </label>
-              <input
-                id="inv-search"
-                type="search"
-                placeholder="Search make, model, year, color…"
-                value={get('q')}
-                onChange={(e) => update('q', e.target.value)}
-              />
-            </form>
+            <SearchSuggest
+              className="inventory__search"
+              placeholder="Search make, model, year, color…"
+              showButton={false}
+              value={get('q')}
+              onValueChange={(v) => update('q', v)}
+              onSearch={() => document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            />
           </div>
         </div>
       </section>
@@ -180,7 +176,7 @@ function Inventory() {
           </button>
         </aside>
 
-        <div className="inventory__main">
+        <div className="inventory__main" id="results">
           <div className="toolbar">
             <p className="toolbar__count" aria-live="polite">
               <strong>{results.length}</strong> {results.length === 1 ? 'vehicle' : 'vehicles'}
