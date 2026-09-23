@@ -43,6 +43,9 @@ const toForm = (v) => ({
   status: v.status === 'sold' ? 'sold' : 'available',
 });
 
+// Accepts "18,900" or "$18,900"; anything non-numeric becomes NaN.
+const toNumber = (v) => (String(v).trim() === '' ? NaN : Number(String(v).replace(/[$,\s]/g, '')));
+
 // Drops empty optional fields so the saved JSON stays tidy.
 const fromForm = (form) => {
   const out = {
@@ -51,8 +54,8 @@ const fromForm = (form) => {
     model: form.model.trim(),
     trim: form.trim.trim(),
     body: form.body,
-    price: Number(form.price),
-    mileage: Number(form.mileage),
+    price: toNumber(form.price),
+    mileage: toNumber(form.mileage),
     exteriorColor: form.exteriorColor.trim(),
     interiorColor: form.interiorColor.trim(),
     transmission: form.transmission,
@@ -83,8 +86,11 @@ const validate = (form) => {
   if (!form.year || !Number.isInteger(year) || year < 1950 || year > thisYear + 1) errors.year = `Enter a year between 1950 and ${thisYear + 1}`;
   if (!form.make.trim()) errors.make = 'Required';
   if (!form.model.trim()) errors.model = 'Required';
-  if (form.price === '' || Number(form.price) <= 0) errors.price = 'Enter the price in dollars';
-  if (form.mileage === '' || Number(form.mileage) < 0) errors.mileage = 'Enter the mileage';
+  // Number.isFinite rejects "abc" and "Infinity", which would save as null and break the site.
+  const price = toNumber(form.price);
+  const mileage = toNumber(form.mileage);
+  if (!Number.isFinite(price) || price <= 0) errors.price = 'Enter the price in dollars, e.g. 18900';
+  if (!Number.isFinite(mileage) || mileage < 0) errors.mileage = 'Enter the mileage as a number, e.g. 54321';
   if (form.vin && !/^[A-HJ-NPR-Z0-9]{17}$/i.test(form.vin.trim())) errors.vin = 'A VIN is 17 letters and numbers (no I, O or Q)';
   return errors;
 };

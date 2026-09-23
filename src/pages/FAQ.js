@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
 import Icon from '../components/Icon';
 import { ContactLink } from '../components/ContactSheet';
@@ -40,6 +40,8 @@ export const faqs = [
 ];
 
 function FAQ() {
+  // Expand the answer a link points to (e.g. /faq#title-status), not just the first one.
+  const target = useLocation().hash.slice(1);
   return (
     <>
       <PageHeader eyebrow="FAQ" title="Questions, answered." lead="Everything you need to know about buying from Banky Auto." />
@@ -48,7 +50,7 @@ function FAQ() {
         <div className="container faq">
           <div className="faq__list">
             {faqs.map((f, i) => (
-              <details key={f.q} id={f.id} className="faq__item" open={i === 0}>
+              <details key={f.q} id={f.id} className="faq__item" open={target ? f.id === target : i === 0}>
                 <summary>
                   <span>{f.q}</span>
                   <Icon name="chevronDown" size={20} />
