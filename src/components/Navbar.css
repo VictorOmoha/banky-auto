@@ -13,7 +13,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: rgba(247, 245, 241, 0.82);
+  background: rgba(255, 255, 255, 0.86);
   backdrop-filter: saturate(180%) blur(14px);
   -webkit-backdrop-filter: saturate(180%) blur(14px);
 }
@@ -40,16 +40,15 @@
 }
 
 .logo__word {
-  font-size: 19px;
-  font-weight: 800;
+  font-size: 21px;
+  font-weight: 900;
   letter-spacing: -0.03em;
   color: var(--ink);
 }
 
 .logo__word span {
-  color: var(--muted);
-  font-weight: 600;
-  margin-left: 3px;
+  color: var(--accent);
+  margin-left: 2px;
 }
 
 .logo--light .logo__word {
@@ -57,7 +56,7 @@
 }
 
 .logo--light .logo__word span {
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--sky);
 }
 
 .nav__links {
@@ -72,19 +71,19 @@
   padding: 8px 14px;
   border-radius: 999px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--ink-soft);
   transition: color 0.15s var(--ease), background-color 0.15s var(--ease);
 }
 
 .nav__link:hover {
-  color: var(--ink);
-  background: rgba(13, 17, 23, 0.05);
+  color: var(--accent);
+  background: var(--surface-2);
 }
 
 .nav__link.active {
-  color: var(--ink);
-  background: rgba(13, 17, 23, 0.07);
+  color: var(--accent);
+  background: var(--accent-soft);
 }
 
 .nav__actions {
@@ -104,7 +103,11 @@
 }
 
 .nav__phone:hover {
-  color: var(--ink);
+  color: var(--accent);
+}
+
+.nav__phone .icon {
+  color: var(--accent);
 }
 
 .nav__cta {

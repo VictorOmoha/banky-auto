@@ -4,10 +4,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 32px;
-  flex-wrap: wrap;
   padding: clamp(36px, 6vw, 64px);
   border-radius: var(--radius-xl);
-  background: var(--ink);
+  background: linear-gradient(120deg, var(--accent-deep) 0%, var(--accent) 55%, #3f8bff 100%);
   color: #fff;
   overflow: hidden;
   isolation: isolate;
@@ -16,22 +15,38 @@
 .cta-band::before {
   content: '';
   position: absolute;
-  inset: 0;
+  width: 520px;
+  height: 520px;
+  right: -140px;
+  top: -200px;
   z-index: -1;
-  background: radial-gradient(70% 120% at 100% 0%, rgba(255, 91, 31, 0.35), transparent 60%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(94, 194, 255, 0.6), transparent);
 }
 
-.cta-band > div:first-child {
-  max-width: 620px;
+.cta-band__copy {
+  max-width: 640px;
 }
 
 .cta-band .lead {
   margin-top: 14px;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.86);
 }
 
 .cta-band__actions {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.cta-band__art {
+  color: rgba(255, 255, 255, 0.28);
+  flex-shrink: 0;
+}
+
+@media (max-width: 800px) {
+  .cta-band__art {
+    display: none;
+  }
 }

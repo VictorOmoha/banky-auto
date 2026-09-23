@@ -80,8 +80,9 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--ink);
+  background: var(--accent);
   color: #fff;
+  box-shadow: 0 0 0 6px var(--accent-soft);
   font-size: 20px;
   font-weight: 800;
   position: relative;

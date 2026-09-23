@@ -41,7 +41,7 @@ function Footer() {
       <div className="container">
         <div className="footer__top">
           <div className="footer__brand">
-            <Logo light />
+            <Logo />
             <p>{site.tagline} Every car is inspected, photographed in detail and priced upfront.</p>
             <div className="footer__contact">
               <a href={site.phoneHref}>

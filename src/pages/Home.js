@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Icon from '../components/Icon';
 import VehicleCard from '../components/VehicleCard';
@@ -8,27 +8,42 @@ import { reviews } from '../data/reviews';
 import { steps } from '../data/process';
 import './Home.css';
 
-const heroCar = vehicles.find((v) => v.id === 'camry2023');
+const byId = (id) => vehicles.find((v) => v.id === id);
+const showcase = [byId('pilot2021'), byId('camry2023'), byId('civic2022')];
 const featured = vehicles.filter((v) => v.featured).slice(0, 6);
 const lowestPrice = Math.min(...vehicles.map((v) => v.price));
+const count = (fn) => vehicles.filter(fn).length;
 
-const quickLinks = [
-  { label: 'SUVs', to: '/vehicles?body=SUV' },
-  { label: 'Sedans', to: '/vehicles?body=Sedan' },
-  { label: 'Honda', to: '/vehicles?make=Honda' },
-  { label: 'Under $15k', to: '/vehicles?max=15000' },
+const categories = [
+  { icon: 'car', label: 'SUVs', to: '/vehicles?body=SUV', meta: `${count((v) => v.body === 'SUV')} available` },
+  { icon: 'car', label: 'Sedans', to: '/vehicles?body=Sedan', meta: `${count((v) => v.body === 'Sedan')} available` },
+  { icon: 'sparkle', label: 'Under $15k', to: '/vehicles?max=15000', meta: `${count((v) => v.price <= 15000)} available` },
+  { icon: 'calendar', label: 'Newest first', to: '/vehicles?sort=year-desc', meta: 'Latest model years' },
 ];
+
+const quickSearches = ['Honda', 'Toyota', 'Pilot', 'Accord'];
 
 const promises = [
   { icon: 'shield', title: 'Inspected & documented', text: 'Every car is checked over and photographed inside and out before it’s listed.' },
-  { icon: 'file', title: 'Upfront pricing', text: 'The price you see is the price. No surprise fees or pressure at the lot.' },
-  { icon: 'key', title: 'Paid off & ready', text: 'Many of our cars are paid off, so there’s no lender payoff to wait on.' },
-  { icon: 'handshake', title: 'Local & personal', text: 'You deal directly with the owner, from your first question to the handover.' },
+  { icon: 'file', title: 'Upfront pricing', text: 'The price you see is the price. No surprise fees and no pressure.' },
+  { icon: 'key', title: 'Many cars paid off', text: 'No lender payoff to wait on, so you can drive home sooner.' },
+  { icon: 'handshake', title: 'Local & personal', text: 'Deal directly with the owner, from first question to handover.' },
 ];
+
+function Stars({ size = 16 }) {
+  return (
+    <span className="stars" aria-label="5 out of 5 stars">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <Icon key={i} name="star" size={size} filled strokeWidth={0} />
+      ))}
+    </span>
+  );
+}
 
 function Home() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
+  const reviewsRef = useRef(null);
 
   const onSearch = (e) => {
     e.preventDefault();
@@ -36,199 +51,196 @@ function Home() {
     navigate(q ? `/vehicles?q=${encodeURIComponent(q)}` : '/vehicles');
   };
 
-  const counts = {
-    SUV: vehicles.filter((v) => v.body === 'SUV').length,
-    Sedan: vehicles.filter((v) => v.body === 'Sedan').length,
+  const scrollReviews = (dir) => {
+    const el = reviewsRef.current;
+    if (el) el.scrollBy({ left: dir * el.clientWidth * 0.85, behavior: 'smooth' });
   };
 
   return (
     <>
       {/* Hero */}
       <section className="hero">
-        <div className="container hero__grid">
-          <div className="hero__copy">
-            <span className="eyebrow rise">Raleigh, NC · Since 2020</span>
-            <h1 className="h1 rise rise-2">
-              Honest cars.
-              <br />
-              <span className="hero__accent">Fair prices.</span>
-            </h1>
-            <p className="lead rise rise-3">
-              Quality used and rebuilt vehicles, inspected and photographed in detail, with upfront prices from{' '}
-              {formatPrice(lowestPrice)}.
-            </p>
+        <div className="container hero__inner">
+          <span className="eyebrow rise">
+            <Stars size={14} /> 5.0 from {reviews.length} customer reviews
+          </span>
+          <h1 className="h1 rise rise-2">
+            Find a car you’ll love,
+            <br />
+            at a price that’s <span className="hero__hl">fair</span>.
+          </h1>
+          <p className="lead rise rise-3">
+            Quality used and rebuilt cars in Raleigh, NC. Inspected, photographed in detail and priced upfront, from{' '}
+            {formatPrice(lowestPrice)}.
+          </p>
 
-            <form className="hero__search rise rise-4" onSubmit={onSearch} role="search">
-              <Icon name="search" size={20} className="hero__search-icon" />
-              <label htmlFor="hero-search" className="sr-only">
-                Search inventory
-              </label>
-              <input
-                id="hero-search"
-                type="search"
-                placeholder="Search make, model or year"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-              <button type="submit" className="btn btn--accent">
-                Search
-              </button>
-            </form>
+          <form className="hero__search rise rise-4" onSubmit={onSearch} role="search">
+            <Icon name="search" size={22} className="hero__search-icon" />
+            <label htmlFor="hero-search" className="sr-only">
+              Search inventory
+            </label>
+            <input
+              id="hero-search"
+              type="search"
+              placeholder="Search by make, model or year"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <button type="submit" className="btn btn--accent btn--lg">
+              Search cars
+            </button>
+          </form>
 
-            <div className="hero__quick rise rise-4">
-              {quickLinks.map((q) => (
-                <Link key={q.label} to={q.to} className="chip hero__chip">
-                  {q.label}
-                </Link>
-              ))}
-            </div>
+          <div className="hero__popular rise rise-4">
+            <span>Popular:</span>
+            {quickSearches.map((q) => (
+              <Link key={q} to={`/vehicles?q=${q}`} className="hero__tag">
+                {q}
+              </Link>
+            ))}
           </div>
+        </div>
 
-          <div className="hero__visual rise rise-3">
-            <div className="hero__frame">
-              <img src={heroCar.photos[0]} alt={`${vehicleName(heroCar)} ${heroCar.trim}`} />
-            </div>
-            <Link to={`/vehicles/${heroCar.id}`} className="hero__float hero__float--car">
-              <span className="muted">Featured</span>
-              <strong>
-                {vehicleName(heroCar)} {heroCar.trim}
-              </strong>
-              <span className="hero__float-row">
-                <span className="hero__float-price">{formatPrice(heroCar.price)}</span>
-                <span className="chip">{heroCar.mileage.toLocaleString()} mi</span>
-              </span>
-            </Link>
-            <div className="hero__float hero__float--rating">
-              <span className="hero__stars" aria-hidden="true">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <Icon key={i} name="star" size={16} filled strokeWidth={0} />
-                ))}
-              </span>
-              <span>
-                <strong>5.0</strong> from {reviews.length} customer reviews
-              </span>
-            </div>
+        <div className="container">
+          <div className="showcase rise rise-4">
+            {showcase.map((v, i) => (
+              <Link key={v.id} to={`/vehicles/${v.id}`} className={`showcase__item showcase__item--${i}`}>
+                <img src={v.photos[0]} alt={`${vehicleName(v)} ${v.trim}`} />
+                <span className="showcase__tag">
+                  <strong>{vehicleName(v)}</strong>
+                  <span>{formatPrice(v.price)}</span>
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Promises */}
-      <section className="promises">
-        <div className="container promises__grid">
-          {promises.map((p) => (
-            <div key={p.title} className="promise">
-              <span className="icon-tile">
-                <Icon name={p.icon} size={22} />
-              </span>
-              <div>
-                <h3>{p.title}</h3>
-                <p>{p.text}</p>
-              </div>
-            </div>
-          ))}
+      {/* Categories */}
+      <section className="section--tight">
+        <div className="container">
+          <div className="cats">
+            {categories.map((c) => (
+              <Link key={c.label} to={c.to} className="cat">
+                <span className="icon-tile">
+                  <Icon name={c.icon} size={22} />
+                </span>
+                <span className="cat__text">
+                  <strong>{c.label}</strong>
+                  <span>{c.meta}</span>
+                </span>
+                <Icon name="chevronRight" size={20} className="cat__go" />
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Featured inventory */}
-      <section className="section">
+      <section className="section home-featured">
         <div className="container">
-          <div className="section-head">
+          <div className="section-head section-head--center">
             <div>
-              <span className="eyebrow">Featured inventory</span>
-              <h2 className="h2">Ready to drive home</h2>
+              <span className="eyebrow">Featured cars</span>
+              <h2 className="h2">Ready for their next owner</h2>
             </div>
-            <Link to="/vehicles" className="text-link">
-              View all {vehicles.length} vehicles <Icon name="arrowRight" size={16} />
-            </Link>
           </div>
           <div className="vgrid">
             {featured.map((v) => (
               <VehicleCard key={v.id} vehicle={v} />
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Browse by type */}
-      <section className="section--tight">
-        <div className="container">
-          <div className="types">
-            <Link to="/vehicles?body=SUV" className="type type--suv">
-              <img src={vehicles.find((v) => v.id === 'pilot2021').photos[0]} alt="" />
-              <div className="type__label">
-                <span className="chip chip--glass">{counts.SUV} available</span>
-                <h3>SUVs</h3>
-                <span className="type__go">
-                  Shop SUVs <Icon name="arrowRight" size={16} />
-                </span>
-              </div>
-            </Link>
-            <Link to="/vehicles?body=Sedan" className="type type--sedan">
-              <img src={vehicles.find((v) => v.id === 'civic2022').photos[0]} alt="" />
-              <div className="type__label">
-                <span className="chip chip--glass">{counts.Sedan} available</span>
-                <h3>Sedans</h3>
-                <span className="type__go">
-                  Shop sedans <Icon name="arrowRight" size={16} />
-                </span>
-              </div>
+          <div className="center-action">
+            <Link to="/vehicles" className="btn btn--ghost btn--lg">
+              See all {vehicles.length} cars <Icon name="arrowRight" size={18} className="icon-slide" />
             </Link>
           </div>
         </div>
       </section>
 
       {/* How it works */}
-      <section className="section section--ink home-steps">
+      <section className="section section--blue">
         <div className="container">
-          <div className="section-head">
+          <div className="section-head section-head--center">
             <div>
               <span className="eyebrow">How it works</span>
-              <h2 className="h2">Buying a car shouldn’t be complicated</h2>
+              <h2 className="h2">Four easy steps to your next car</h2>
             </div>
-            <Link to="/how-it-works" className="btn btn--outline-light">
-              Learn more <Icon name="arrowRight" size={16} className="icon-slide" />
-            </Link>
           </div>
           <ol className="steps">
             {steps.map((s, i) => (
               <li key={s.title} className="step">
-                <span className="step__num">{String(i + 1).padStart(2, '0')}</span>
+                <span className="step__num">{i + 1}</span>
                 <h3>{s.title}</h3>
                 <p>{s.text}</p>
               </li>
             ))}
           </ol>
+          <div className="center-action">
+            <Link to="/how-it-works" className="btn btn--light btn--lg">
+              Learn more about buying <Icon name="arrowRight" size={18} className="icon-slide" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why us */}
+      <section className="section">
+        <div className="container why">
+          <div className="why__media">
+            <img src={byId('accord2020').photos[0]} alt="2020 Honda Accord EX" loading="lazy" />
+            <div className="why__badge">
+              <span className="icon-tile">
+                <Icon name="camera" size={20} />
+              </span>
+              <span>
+                <strong>Full photo galleries</strong>
+                <span className="muted">on most listings</span>
+              </span>
+            </div>
+          </div>
+          <div>
+            <span className="eyebrow">Why Banky Auto</span>
+            <h2 className="h2">Car buying that feels good</h2>
+            <p className="lead why__lead">No pushy sales, no hidden fees. Just good cars and straight answers.</p>
+            <ul className="why__list">
+              {promises.map((p) => (
+                <li key={p.title}>
+                  <span className="icon-tile">
+                    <Icon name={p.icon} size={22} />
+                  </span>
+                  <span>
+                    <strong>{p.title}</strong>
+                    <span className="muted">{p.text}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
       {/* Reviews */}
-      <section className="section">
+      <section className="section section--surface">
         <div className="container">
           <div className="section-head">
             <div>
               <span className="eyebrow">Customer reviews</span>
-              <h2 className="h2">Don’t just take our word for it</h2>
+              <h2 className="h2">Our customers say it best</h2>
             </div>
-            <div className="rating-summary">
-              <span className="rating-summary__score">5.0</span>
-              <span>
-                <span className="hero__stars" aria-label="5 out of 5 stars">
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <Icon key={i} name="star" size={16} filled strokeWidth={0} />
-                  ))}
-                </span>
-                <span className="muted">{reviews.length} customer reviews</span>
-              </span>
+            <div className="reviews__nav">
+              <button type="button" className="round-btn" onClick={() => scrollReviews(-1)} aria-label="Previous reviews">
+                <Icon name="chevronLeft" size={20} />
+              </button>
+              <button type="button" className="round-btn" onClick={() => scrollReviews(1)} aria-label="Next reviews">
+                <Icon name="chevronRight" size={20} />
+              </button>
             </div>
           </div>
-          <div className="reviews">
+          <div className="reviews" ref={reviewsRef} tabIndex={0} aria-label="Customer reviews">
             {reviews.map((r) => (
               <figure key={r.name} className="review">
-                <span className="hero__stars" aria-label="5 out of 5 stars">
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <Icon key={i} name="star" size={15} filled strokeWidth={0} />
-                  ))}
-                </span>
+                <Stars />
                 <blockquote>“{r.content}”</blockquote>
                 <figcaption>
                   <span className="review__avatar" aria-hidden="true">
