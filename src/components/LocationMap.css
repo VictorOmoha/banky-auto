@@ -1,0 +1,180 @@
+.locmap {
+  position: relative;
+  margin-top: 24px;
+  height: 440px;
+  overflow: hidden;
+  padding: 0;
+  background: #e9f0fb;
+}
+
+.locmap iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Self-contained illustrated map */
+.locmap__art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background-color: #eaf1fb;
+  background-image: linear-gradient(rgba(23, 66, 176, 0.07) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(23, 66, 176, 0.07) 2px, transparent 2px),
+    linear-gradient(rgba(23, 66, 176, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 66, 176, 0.04) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 30px 30px, 30px 30px;
+  background-position: -2px -2px;
+}
+
+.locmap__road {
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(23, 66, 176, 0.1);
+}
+
+.locmap__road--a {
+  left: -10%;
+  right: -10%;
+  top: 46%;
+  height: 22px;
+  transform: rotate(-6deg);
+}
+
+.locmap__road--b {
+  top: -10%;
+  bottom: -10%;
+  left: 58%;
+  width: 18px;
+  transform: rotate(14deg);
+}
+
+.locmap__road--c {
+  left: 10%;
+  right: 30%;
+  top: 22%;
+  height: 12px;
+  transform: rotate(18deg);
+}
+
+.locmap__park {
+  position: absolute;
+  right: 8%;
+  top: 12%;
+  width: 180px;
+  height: 120px;
+  border-radius: 40px;
+  background: #d9efe3;
+}
+
+.locmap__pin {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 12px 24px -8px rgba(23, 66, 176, 0.7);
+  transition: transform 0.2s var(--ease);
+}
+
+.locmap__art:hover .locmap__pin {
+  transform: translateY(-4px);
+}
+
+.locmap__pulse {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  opacity: 0;
+  animation: locmap-pulse 2.2s var(--ease) infinite;
+}
+
+@keyframes locmap-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Info bar */
+.locmap__info {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+
+.locmap--live .locmap__info {
+  left: auto;
+  max-width: 560px;
+}
+
+.locmap__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 180px;
+  line-height: 1.4;
+}
+
+.locmap__text span {
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.locmap__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.locmap__actions .btn {
+  min-height: 44px;
+  font-size: 14px;
+}
+
+@media (max-width: 700px) {
+  .locmap {
+    height: auto;
+    min-height: 460px;
+  }
+
+  .locmap--live {
+    height: 460px;
+  }
+
+  .locmap--live .locmap__info {
+    left: 16px;
+  }
+
+  .locmap__pin {
+    top: 28%;
+  }
+
+  .locmap__actions {
+    width: 100%;
+  }
+
+  .locmap__actions .btn {
+    flex: 1;
+  }
+}

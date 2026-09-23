@@ -1,78 +1,84 @@
 import React from 'react';
-import './HowItWorks.css';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Icon from '../components/Icon';
+import PageHeader from '../components/PageHeader';
+import CtaBand from '../components/CtaBand';
+import { steps } from '../data/process';
+import { pickVehicles, vehicleName } from '../data/vehicles';
+import './Pages.css';
+
+const showcase = pickVehicles(['accord2020'], 1)[0];
+
+const details = [
+  { icon: 'camera', title: 'Full photo sets', text: 'Up to 15 photos per car, inside and out, so you know what you’re looking at before you visit.' },
+  { icon: 'file', title: 'Clear title information', text: 'Salvage or rebuilt titles are disclosed upfront on the listing, with the damage history explained.' },
+  { icon: 'users', title: 'Bring a second opinion', text: 'Pre-purchase inspections are welcome. Bring your own mechanic to look the car over.' },
+  { icon: 'message', title: 'Straight answers', text: 'Questions get a real reply from the person selling the car, not a call center.' },
+];
 
 function HowItWorks() {
-  const navigate = useNavigate();
-
   return (
-    <div className="how-it-works-page">
-      <div className="hero-section">
-        <div className="hero-content">
-          <div className="process-showcase">
-            <img src="/cars/civic2022.jpeg" alt="Process Overview" />
-            <div className="process-badge">
-              <span className="process-label">Simple Steps</span>
-              <span className="process-count">4 Easy Steps</span>
+    <>
+      <PageHeader
+        eyebrow="How it works"
+        title="From first look to keys in hand, in four steps."
+        lead="We keep buying simple and transparent: honest listings, open inspections and no pressure."
+      >
+        <div className="page-header__actions rise rise-4">
+          <Link to="/vehicles" className="btn btn--accent btn--lg">
+            Start browsing <Icon name="arrowRight" size={18} className="icon-slide" />
+          </Link>
+        </div>
+      </PageHeader>
+
+      <section className="section">
+        <div className="container">
+          <ol className="timeline">
+            {steps.map((s, i) => (
+              <li key={s.title} className="timeline__item">
+                <span className="timeline__num">{i + 1}</span>
+                <div className="timeline__card card">
+                  <span className="icon-tile">
+                    <Icon name={s.icon} size={22} />
+                  </span>
+                  <div>
+                    <h2 className="h3">{s.title}</h2>
+                    <p className="muted">{s.text}</p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="section section--surface">
+        <div className="container split">
+          <div className="split__media">
+            {showcase && <img src={showcase.photos[0]} alt={`${vehicleName(showcase)} ${showcase.trim}`} loading="lazy" />}
+          </div>
+          <div>
+            <span className="eyebrow">What you can expect</span>
+            <h2 className="h2">Every listing, done properly</h2>
+            <div className="feature-list">
+              {details.map((d) => (
+                <div key={d.title} className="feature">
+                  <span className="icon-tile">
+                    <Icon name={d.icon} size={20} />
+                  </span>
+                  <div>
+                    <h3>{d.title}</h3>
+                    <p className="muted">{d.text}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="process-info">
-            <h1>HOW BANKY AUTO WORKS</h1>
-            <p>Your journey to a quality salvage vehicle starts here.<br />Simple, transparent, and detailed documentation of every vehicle.</p>
-            <button 
-              className="start-journey-btn"
-              onClick={() => navigate('/inventory')}
-            >
-              Start Your Journey
-            </button>
-          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="process-steps-section">
-        <h2>Your Path to Your Next Vehicle</h2>
-        <div className="steps-grid">
-          <div className="step-card">
-            <div className="step-number">1</div>
-            <h3>Browse & Select</h3>
-            <p>Explore our inventory of salvage vehicles. Each listing includes detailed damage history and repair documentation.</p>
-          </div>
-          <div className="step-card">
-            <div className="step-number">2</div>
-            <h3>Vehicle History Review</h3>
-            <p>Review comprehensive damage assessment, repair documentation, and current vehicle condition reports.</p>
-          </div>
-          <div className="step-card">
-            <div className="step-number">3</div>
-            <h3>Inspection Options</h3>
-            <p>Schedule an in-person inspection or review our detailed virtual inspection report with high-resolution photos.</p>
-          </div>
-          <div className="step-card">
-            <div className="step-number">4</div>
-            <h3>Complete Purchase</h3>
-            <p>Finalize your purchase with all necessary salvage title documentation and schedule delivery or pickup.</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="unlock-section">
-        <div className="unlock-content">
-          <h2>Ready to find your perfect salvage vehicle?</h2>
-          <p>Browse our selection of quality rebuilt salvage cars</p>
-          <button 
-            className="browse-inventory-btn"
-            onClick={() => navigate('/inventory')}
-          >
-            Browse Inventory
-          </button>
-        </div>
-        <div className="car-samples">
-          <img src="/cars/camry.jpeg" alt="Car Sample 1" />
-          <img src="/cars/pilot2021.jpeg" alt="Car Sample 2" />
-          <img src="/cars/civic2022.jpeg" alt="Car Sample 3" />
-        </div>
-      </div>
-    </div>
+      <CtaBand title="Ready to find your car?" text="Browse the lot online, then come see your favorite in person." />
+    </>
   );
 }
 

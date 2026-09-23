@@ -1,61 +1,200 @@
-.navbar {
-  background: #fff;
-  height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2rem;
+.nav {
   position: sticky;
   top: 0;
-  z-index: 999;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 50;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 
-.navbar-container {
+/* Blur lives on a pseudo-element: backdrop-filter on .nav itself would trap
+   the fixed-position mobile sheet inside the header box. */
+.nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+}
+
+.nav--open::before {
+  background: var(--paper);
+}
+
+.nav--scrolled {
+  border-bottom-color: var(--line);
+}
+
+.nav__inner {
+  height: var(--nav-h);
   display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo__word {
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.logo__word span {
+  color: var(--accent);
+  margin-left: 2px;
+}
+
+.logo--light .logo__word {
+  color: #fff;
+}
+
+.logo--light .logo__word span {
+  color: var(--sky);
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.nav__link {
+  position: relative;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  transition: color 0.15s var(--ease), background-color 0.15s var(--ease);
+}
+
+.nav__link:hover {
+  color: var(--accent);
+  background: var(--surface-2);
+}
+
+.nav__link.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav__phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--ink-soft);
+  padding: 8px 4px;
+}
+
+.nav__phone:hover {
+  color: var(--accent);
+}
+
+.nav__phone .icon {
+  color: var(--accent);
+}
+
+.nav__cta {
+  min-height: 42px;
+  padding: 0 18px;
+  font-size: 14px;
+}
+
+.nav__toggle {
+  display: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.nav__sheet {
+  position: fixed;
+  inset: var(--nav-h) 0 0;
+  background: var(--paper);
+  overflow-y: auto;
+  animation: rise 0.25s var(--ease) both;
+}
+
+.nav__sheet[hidden] {
+  display: none;
+}
+
+.nav__sheet-links {
+  display: flex;
+  flex-direction: column;
+  padding-top: 12px;
+  padding-bottom: 32px;
+}
+
+.nav__sheet-link {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  max-width: 1300px;
-  padding: 0 50px;
+  padding: 18px 0;
+  font-size: 24px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  border-bottom: 1px solid var(--line);
 }
 
-.navbar-logo {
-  color: #333;
-  text-decoration: none;
-  font-size: 2rem;
-  font-weight: bold;
+.nav__sheet-link .icon {
+  color: var(--muted);
 }
 
-.nav-menu {
-  display: flex;
-  align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.nav__sheet-link.active {
+  color: var(--accent);
 }
 
-.nav-item {
-  margin: 0 1rem;
+.nav__sheet-actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 28px;
 }
 
-.nav-link {
-  color: #333;
-  text-decoration: none;
-  padding: 0.5rem 1rem;
+@media (max-width: 1080px) {
+  .nav__phone span {
+    display: none;
+  }
 }
 
-.nav-link:hover {
-  color: #007bff;
+@media (max-width: 900px) {
+  .nav__links,
+  .nav__phone,
+  .nav__cta {
+    display: none;
+  }
+
+  .nav__actions {
+    margin-left: auto;
+  }
+
+  .nav__toggle {
+    display: grid;
+  }
 }
 
-.nav-user-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.phone-icon {
-  font-size: 1.5rem;
-  text-decoration: none;
+@media (min-width: 901px) {
+  .nav__sheet {
+    display: none !important;
+  }
 }
