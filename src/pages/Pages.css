@@ -564,3 +564,57 @@ a.contact-card:hover .contact-card__go {
   justify-content: center;
   margin-top: 16px;
 }
+
+/* Wide photo with a caption chip */
+.photo-band {
+  position: relative;
+  margin: clamp(40px, 6vw, 64px) 0 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--surface-2);
+  aspect-ratio: 21 / 9;
+}
+
+.photo-band img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-band figcaption {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  max-width: calc(100% - 32px);
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 999px;
+  box-shadow: var(--shadow-lg);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.photo-band--entrance {
+  margin: clamp(40px, 6vw, 64px) 0 0;
+  aspect-ratio: 5 / 2;
+}
+
+.photo-band--entrance img {
+  object-position: center 45%;
+}
+
+@media (max-width: 640px) {
+  .photo-band,
+  .photo-band--entrance {
+    aspect-ratio: 4 / 3;
+  }
+
+  .photo-band figcaption {
+    left: 10px;
+    bottom: 10px;
+    max-width: calc(100% - 20px);
+    border-radius: 14px;
+    font-size: 13px;
+  }
+}

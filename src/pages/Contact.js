@@ -4,6 +4,7 @@ import { ContactLink, useContact } from '../components/ContactSheet';
 import PageHeader from '../components/PageHeader';
 import LocationMap from '../components/LocationMap';
 import { site, fullAddress, mapsUrl } from '../data/site';
+import { lotPhotos } from '../data/lot';
 import './Pages.css';
 
 const empty = { name: '', email: '', phone: '', subject: '', message: '' };
@@ -158,6 +159,10 @@ function Contact() {
         </div>
 
         <div className="container">
+          <figure className="photo-band photo-band--entrance">
+            <img src={lotPhotos.entrance.src} alt={lotPhotos.entrance.alt} loading="lazy" />
+            <figcaption>Drive in through the gate. The cars are parked right inside.</figcaption>
+          </figure>
           <LocationMap />
         </div>
       </section>
