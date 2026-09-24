@@ -88,7 +88,7 @@ function Business() {
           <div className="admin-form-grid">
             {input('b-name', 'Business name', 'name')}
             {input('b-legal', 'Legal name', 'legalName')}
-            {input('b-phone', 'Phone', 'phone', { attrs: { type: 'tel', placeholder: '+1 (919) 123-4567' } })}
+            {input('b-phone', 'Phone', 'phone', { attrs: { type: 'tel', placeholder: '+1 (919) 593-9609' } })}
             {input('b-founded', 'Year founded', 'founded', { attrs: { inputMode: 'numeric' } })}
             {input('b-email', 'General email', 'email', { attrs: { type: 'email' } })}
             {input('b-sales', 'Sales email', 'salesEmail', { attrs: { type: 'email' } })}
