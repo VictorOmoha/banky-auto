@@ -6,5 +6,6 @@ export const lotPhotos = {
   acuraMaxima: { src: img('lot-acura-maxima.jpg'), alt: 'A white Acura Integra between a Honda Passport and a black Nissan Maxima on the lot' },
   maximaAltima: { src: img('lot-maxima-altima.jpg'), alt: 'A silver Nissan Maxima and Nissan Altima on the Banky Auto lot' },
   trucksSuvs: { src: img('lot-trucks-suvs.jpg'), alt: 'A Toyota Tundra, two Honda Passports and an Acura Integra on the lot' },
+  customers: { src: img('banky-with-customers.jpg'), alt: 'Banky, the owner, smiling with two customers in U.S. Army uniform after buying their car' },
   entrance: { src: img('lot-entrance.jpg'), alt: 'The gated entrance to the Banky Auto lot, with cars parked inside' },
 };
