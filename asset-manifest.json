@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/banky-auto/static/css/main.d8a28746.css",
-    "main.js": "/banky-auto/static/js/main.4f110bac.js",
-    "static/css/120.cfa25a04.chunk.css": "/banky-auto/static/css/120.cfa25a04.chunk.css",
-    "static/js/120.645ab759.chunk.js": "/banky-auto/static/js/120.645ab759.chunk.js",
-    "static/js/453.f0e06290.chunk.js": "/banky-auto/static/js/453.f0e06290.chunk.js",
-    "index.html": "/banky-auto/index.html",
-    "main.d8a28746.css.map": "/banky-auto/static/css/main.d8a28746.css.map",
-    "main.4f110bac.js.map": "/banky-auto/static/js/main.4f110bac.js.map",
-    "120.cfa25a04.chunk.css.map": "/banky-auto/static/css/120.cfa25a04.chunk.css.map",
-    "120.645ab759.chunk.js.map": "/banky-auto/static/js/120.645ab759.chunk.js.map",
-    "453.f0e06290.chunk.js.map": "/banky-auto/static/js/453.f0e06290.chunk.js.map"
+    "main.css": "/static/css/main.d8a28746.css",
+    "main.js": "/static/js/main.036212d9.js",
+    "static/css/120.cfa25a04.chunk.css": "/static/css/120.cfa25a04.chunk.css",
+    "static/js/120.97655343.chunk.js": "/static/js/120.97655343.chunk.js",
+    "static/js/453.f0e06290.chunk.js": "/static/js/453.f0e06290.chunk.js",
+    "index.html": "/index.html",
+    "main.d8a28746.css.map": "/static/css/main.d8a28746.css.map",
+    "main.036212d9.js.map": "/static/js/main.036212d9.js.map",
+    "120.cfa25a04.chunk.css.map": "/static/css/120.cfa25a04.chunk.css.map",
+    "120.97655343.chunk.js.map": "/static/js/120.97655343.chunk.js.map",
+    "453.f0e06290.chunk.js.map": "/static/js/453.f0e06290.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d8a28746.css",
-    "static/js/main.4f110bac.js"
+    "static/js/main.036212d9.js"
   ]
 }
