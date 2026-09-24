@@ -12,7 +12,6 @@ import './Home.css';
 const showcase = pickVehicles(['pilot2021', 'camry2023', 'civic2022'], 3);
 const whyCar = pickVehicles(['accord2020'], 1)[0];
 const featured = vehicles.filter((v) => v.featured).slice(0, 6);
-const lowestPrice = vehicles.length ? Math.min(...vehicles.map((v) => v.price)) : null;
 const count = (fn) => vehicles.filter(fn).length;
 
 const categories = [
@@ -63,8 +62,8 @@ function Home() {
             at a price that’s <span className="hero__hl">fair</span>.
           </h1>
           <p className="lead rise rise-3">
-            Quality used and rebuilt cars in Raleigh, NC. Inspected, photographed in detail and priced upfront
-            {lowestPrice ? `, from ${formatPrice(lowestPrice)}` : ''}.
+            Quality used and rebuilt cars in Raleigh, NC. Inspected, photographed in detail and priced upfront, with
+            options for every budget.
           </p>
 
           <SearchSuggest className="hero__suggest rise rise-4" />
