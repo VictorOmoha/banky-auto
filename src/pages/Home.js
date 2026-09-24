@@ -7,6 +7,8 @@ import SearchSuggest from '../components/SearchSuggest';
 import { vehicles, formatPrice, vehicleName, pickVehicles } from '../data/vehicles';
 import { reviews } from '../data/reviews';
 import { steps } from '../data/process';
+import { lotPhotos } from '../data/lot';
+import { site, fullAddress, directionsUrl } from '../data/site';
 import './Home.css';
 
 const showcase = pickVehicles(['pilot2021', 'camry2023', 'civic2022'], 3);
@@ -197,8 +199,44 @@ function Home() {
         </div>
       </section>
 
-      {/* Reviews */}
+      {/* Visit the lot */}
       <section className="section section--surface">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <span className="eyebrow">Visit the lot</span>
+              <h2 className="h2">Come see them in person</h2>
+              <p className="lead lot__lead">
+                Every car we list is parked on our lot in Raleigh. Stop by, take a good look and bring your mechanic.
+              </p>
+            </div>
+            <a href={directionsUrl} target="_blank" rel="noopener noreferrer" className="btn btn--accent">
+              <Icon name="pin" size={18} /> Get directions
+            </a>
+          </div>
+          <div className="lot">
+            {[lotPhotos.frontRow, lotPhotos.acuraMaxima, lotPhotos.maximaAltima].map((p, i) => (
+              <figure key={p.src} className={`lot__item lot__item--${i}`}>
+                <img src={p.src} alt={p.alt} loading="lazy" />
+                {i === 0 && (
+                  <figcaption className="lot__tag">
+                    <span className="icon-tile">
+                      <Icon name="pin" size={18} />
+                    </span>
+                    <span>
+                      <strong>{site.name}</strong>
+                      <span>{fullAddress}</span>
+                    </span>
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className="section">
         <div className="container">
           <div className="section-head">
             <div>

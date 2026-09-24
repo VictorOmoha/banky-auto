@@ -2,7 +2,8 @@ import React from 'react';
 import Icon from '../components/Icon';
 import PageHeader from '../components/PageHeader';
 import CtaBand from '../components/CtaBand';
-import { site } from '../data/site';
+import { site, fullAddress } from '../data/site';
+import { lotPhotos } from '../data/lot';
 import './Pages.css';
 
 const stats = [
@@ -48,6 +49,10 @@ function About() {
         </div>
 
         <div className="container">
+          <figure className="photo-band">
+            <img src={lotPhotos.trucksSuvs.src} alt={lotPhotos.trucksSuvs.alt} loading="lazy" />
+            <figcaption>Our lot at {fullAddress}</figcaption>
+          </figure>
           <dl className="stats">
             {stats.map((s) => (
               <div key={s.label} className="stat">
