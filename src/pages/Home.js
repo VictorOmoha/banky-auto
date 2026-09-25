@@ -12,7 +12,6 @@ import { site, fullAddress, directionsUrl } from '../data/site';
 import './Home.css';
 
 const showcase = pickVehicles(['pilot2021', 'camry2023', 'civic2022'], 3);
-const whyCar = pickVehicles(['accord2020'], 1)[0];
 const featured = vehicles.filter((v) => v.featured).slice(0, 6);
 const count = (fn) => vehicles.filter(fn).length;
 
@@ -167,14 +166,14 @@ function Home() {
       <section className="section">
         <div className="container why">
           <div className="why__media">
-            {whyCar && <img src={whyCar.photos[0]} alt={`${vehicleName(whyCar)} ${whyCar.trim}`} loading="lazy" />}
+            <img src={lotPhotos.customers.src} alt={lotPhotos.customers.alt} loading="lazy" />
             <div className="why__badge">
               <span className="icon-tile">
-                <Icon name="camera" size={20} />
+                <Icon name="handshake" size={20} />
               </span>
               <span>
-                <strong>Full photo galleries</strong>
-                <span className="muted">on most listings</span>
+                <strong>Happy customers</strong>
+                <span className="muted">Banky on handover day</span>
               </span>
             </div>
           </div>
