@@ -139,7 +139,15 @@
     "fuelType": "Gasoline",
     "vin": "1HGCV1F49LA072295",
     "safetyRating": "5-star overall NHTSA rating",
+    "description": "Runs and drives great. Features include a backup camera, blind spot monitor and lane departure warning. This vehicle is paid off.",
+    "highlights": [
+      "Blind spot monitor",
+      "Lane departure warning",
+      "Backup camera",
+      "Paid off"
+    ],
     "featured": true,
+    "status": "sold",
     "photos": [
       "accord2020.jpg",
       "accord2020a.jpg",
@@ -151,15 +159,7 @@
       "accord2020i.jpg",
       "accord2020j.jpg"
     ],
-    "highlights": [
-      "Blind spot monitor",
-      "Lane departure warning",
-      "Backup camera",
-      "Paid off"
-    ],
-    "description": "Runs and drives great. Features include a backup camera, blind spot monitor and lane departure warning. This vehicle is paid off.",
-    "status": "available",
-    "updatedAt": "2026-09-23T00:00:00.000Z"
+    "updatedAt": "2026-09-25T00:31:49.566Z"
   },
   {
     "id": "accord2015",
