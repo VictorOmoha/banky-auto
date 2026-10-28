@@ -39,7 +39,15 @@ function Financing() {
                 </li>
               ))}
             </ul>
-            <a href={creditAppUrl} target="_blank" rel="noopener noreferrer" className="btn btn--accent btn--lg btn--block">
+            {/* No "noreferrer": DealerCenter rejects visits that don't say they came from our site. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a
+              href={creditAppUrl}
+              target="_blank"
+              rel="noopener"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="btn btn--accent btn--lg btn--block"
+            >
               Start your credit application <Icon name="external" size={18} />
             </a>
             <p className="credit-app__note muted">
