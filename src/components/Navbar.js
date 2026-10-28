@@ -8,6 +8,7 @@ import './Navbar.css';
 
 const links = [
   { to: '/vehicles', label: 'Inventory' },
+  { to: '/financing', label: 'Financing' },
   { to: '/how-it-works', label: 'How it works' },
   { to: '/about', label: 'About' },
   { to: '/faq', label: 'FAQ' },

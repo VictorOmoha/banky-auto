@@ -11,7 +11,7 @@ const topics = [
   { icon: 'file', title: 'Understanding title status', text: 'Clean, salvage and rebuilt titles, explained.', to: '/faq#title-status' },
   { icon: 'calendar', title: 'Scheduling a test drive', text: 'Book a time right from any vehicle page.', to: '/faq' },
   { icon: 'key', title: 'The buying process', text: 'What happens from first look to handover.', to: '/how-it-works' },
-  { icon: 'briefcase', title: 'Financing options', text: 'We work with multiple lenders. Ask us how.', to: '/faq' },
+  { icon: 'briefcase', title: 'Financing options', text: 'Apply online with our secure credit application.', to: '/financing' },
   { icon: 'message', title: 'Contact support', text: 'Talk to a real person about anything else.', to: '/contact' },
 ];
 
