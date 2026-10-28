@@ -13,6 +13,7 @@ const columns = [
       { to: '/vehicles', label: 'All inventory' },
       { to: '/vehicles?body=Sedan', label: 'Sedans' },
       { to: '/vehicles?body=SUV', label: 'SUVs' },
+      { to: '/financing', label: 'Apply for financing' },
       { to: '/how-it-works', label: 'How it works' },
     ],
   },

@@ -31,7 +31,7 @@ export const faqs = [
   },
   {
     q: 'Do you offer financing?',
-    a: 'Yes, we work with multiple lenders to provide competitive financing options for all credit situations. Contact us to talk through your options.',
+    a: 'Yes, we work with multiple lenders to provide competitive financing options for all credit situations. Apply online on our Financing page, or contact us to talk through your options.',
   },
   {
     q: 'What warranties do you offer?',

@@ -208,6 +208,9 @@ function VehicleDetail() {
                   <button type="button" className="btn btn--accent btn--lg btn--block" onClick={openModal}>
                     <Icon name="calendar" size={18} /> Schedule a test drive
                   </button>
+                  <Link to="/financing" className="btn btn--ghost btn--lg btn--block">
+                    <Icon name="file" size={18} /> Apply for financing
+                  </Link>
                   <div className="buybox__row">
                     <ContactLink type="call" className="btn btn--ghost btn--block">
                       <Icon name="phone" size={16} /> Call

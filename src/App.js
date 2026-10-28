@@ -13,6 +13,7 @@ import Contact from './pages/Contact';
 import FAQ from './pages/FAQ';
 import HelpCenter from './pages/HelpCenter';
 import Careers from './pages/Careers';
+import Financing from './pages/Financing';
 import NotFound from './pages/NotFound';
 
 // The owner's admin portal is loaded only when someone visits /admin.
@@ -45,6 +46,7 @@ function PublicSite() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/help" element={<HelpCenter />} />
             <Route path="/careers" element={<Careers />} />
+            <Route path="/financing" element={<Financing />} />
             <Route path="/login" element={<Navigate to="/admin" replace />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
