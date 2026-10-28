@@ -76,6 +76,10 @@
   margin-top: 36px;
 }
 
+.hero__finance {
+  margin-top: 24px;
+}
+
 .hero__popular {
   display: flex;
   align-items: center;
