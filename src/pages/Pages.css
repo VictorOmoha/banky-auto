@@ -619,20 +619,32 @@ a.contact-card:hover .contact-card__go {
   }
 }
 
-/* Financing: embedded credit application */
+/* Financing: credit application */
 .credit-app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 40px);
+}
+
+.credit-app__list {
+  display: grid;
+  gap: 14px;
+  margin: 20px 0 28px;
   padding: 0;
-  overflow: hidden;
+  list-style: none;
 }
 
-.credit-app__frame {
-  display: block;
-  width: 100%;
-  height: 1093px;
-  border: 0;
+.credit-app__list li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.credit-app__fallback {
+.credit-app__list .icon-tile {
+  flex-shrink: 0;
+}
+
+.credit-app__note {
   margin-top: 16px;
   text-align: center;
 }
