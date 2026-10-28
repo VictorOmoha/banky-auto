@@ -78,6 +78,10 @@ function Home() {
               </Link>
             ))}
           </div>
+
+          <Link to="/financing" className="btn btn--accent btn--lg hero__finance rise rise-4">
+            <Icon name="file" size={18} /> Apply for financing <Icon name="arrowRight" size={18} className="icon-slide" />
+          </Link>
         </div>
 
         <div className="container">
