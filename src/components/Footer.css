@@ -96,6 +96,14 @@
 
 .footer__bottom-links {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.footer__bottom-links a:not(.footer__owner):hover {
+  color: var(--accent);
 }
 
 .footer__owner {

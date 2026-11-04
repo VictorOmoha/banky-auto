@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const routes = ['vehicles', 'financing', 'how-it-works', 'about', 'contact', 'faq', 'help', 'careers', 'admin'];
+const routes = ['vehicles', 'financing', 'how-it-works', 'about', 'contact', 'faq', 'help', 'careers', 'privacy-policy', 'terms-of-use', 'admin'];
 
 const build = path.join(__dirname, '..', 'build');
 const shell = fs.readFileSync(path.join(build, 'index.html'));

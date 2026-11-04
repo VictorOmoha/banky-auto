@@ -14,6 +14,8 @@ import FAQ from './pages/FAQ';
 import HelpCenter from './pages/HelpCenter';
 import Careers from './pages/Careers';
 import Financing from './pages/Financing';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 import NotFound from './pages/NotFound';
 
 // The owner's admin portal is loaded only when someone visits /admin.
@@ -47,6 +49,10 @@ function PublicSite() {
             <Route path="/help" element={<HelpCenter />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/financing" element={<Financing />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-use" element={<TermsOfService />} />
+            <Route path="/privacy" element={<Navigate to="/privacy-policy" replace />} />
+            <Route path="/terms" element={<Navigate to="/terms-of-use" replace />} />
             <Route path="/login" element={<Navigate to="/admin" replace />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
