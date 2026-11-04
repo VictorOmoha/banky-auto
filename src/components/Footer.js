@@ -22,7 +22,7 @@ const columns = [
     links: [
       { to: '/about', label: 'About us' },
       { to: '/careers', label: 'Careers' },
-      { to: '/contact', label: 'Contact' },
+      { to: '/contact', label: 'Contact us' },
     ],
   },
   {
@@ -31,6 +31,8 @@ const columns = [
       { to: '/faq', label: 'FAQ' },
       { to: '/help', label: 'Help center' },
       { to: '/faq#title-status', label: 'Title status explained' },
+      { to: '/privacy-policy', label: 'Privacy Policy' },
+      { to: '/terms-of-use', label: 'Terms of Service' },
     ],
   },
 ];
@@ -77,6 +79,8 @@ function Footer() {
             © {year} {site.legalName}. All rights reserved.
           </p>
           <div className="footer__bottom-links">
+            <Link to="/privacy-policy">Privacy Policy</Link>
+            <Link to="/terms-of-use">Terms of Service</Link>
             <Link to="/admin" className="footer__owner">
               <Icon name="key" size={14} /> Owner login
             </Link>
